@@ -170,7 +170,7 @@ export default function Shop() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
           <div>
             <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-3">DIDEE Store</p>
-            <h1 className="font-serif text-5xl font-medium tracking-wide">
+            <h1 className="font-serif text-3xl sm:text-5xl font-medium tracking-wide">
               {selectedCategory
                 ? categories?.find(c => c.slug === selectedCategory)?.name ?? "Products"
                 : selectedCollection
@@ -219,7 +219,7 @@ export default function Shop() {
           {/* Product Grid */}
           <div className="flex-1">
             {isLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-3 sm:gap-x-6 gap-y-8 sm:gap-y-12">
                 {[...Array(6)].map((_, i) => (
                   <div key={i} className="animate-pulse">
                     <div className="bg-muted aspect-[3/4] mb-4" />
@@ -230,7 +230,7 @@ export default function Shop() {
               </div>
             ) : productsData?.products.length ? (
               <>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-3 sm:gap-x-6 gap-y-8 sm:gap-y-12">
                   {productsData.products.map((product, index) => (
                     <ProductCard key={product.id} product={product} index={index} />
                   ))}

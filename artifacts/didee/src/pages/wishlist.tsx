@@ -121,7 +121,7 @@ export default function Wishlist() {
                 <Trash2 className="w-3.5 h-3.5" /> Clear All
               </button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
               <AnimatePresence>
                 {items.map((item) => (
                   <motion.div

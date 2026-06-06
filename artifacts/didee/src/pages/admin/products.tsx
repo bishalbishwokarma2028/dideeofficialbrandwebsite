@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search, Edit, Trash2, X, Upload, ImagePlus, ToggleLeft, ToggleRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { apiUrl } from "@/lib/api";
 
 type ProductForm = {
   name: string;
@@ -100,7 +101,7 @@ export default function AdminProducts() {
     try {
       const fd = new FormData();
       fd.append("file", file);
-      const res = await fetch("/api/upload", {
+      const res = await fetch(apiUrl("/api/upload"), {
         method: "POST",
         body: fd,
         credentials: "include",
@@ -151,10 +152,11 @@ export default function AdminProducts() {
         images: form.images,
       };
 
-      const url = modal.mode === "create" ? "/api/products" : `/api/products/${modal.slug}`;
+      const url = modal.mode === "create" ? apiUrl("/api/products") : apiUrl(`/api/products/${modal.slug}`);
       const method = modal.mode === "create" ? "POST" : "PATCH";
       const res = await fetch(url, {
         method,
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
@@ -173,7 +175,7 @@ export default function AdminProducts() {
 
   async function handleDelete(slug: string) {
     try {
-      await fetch(`/api/products/${slug}`, { method: "DELETE" });
+      await fetch(apiUrl(`/api/products/${slug}`), { method: "DELETE" });
       await queryClient.invalidateQueries({ queryKey: getListProductsQueryKey() });
       setDeleteConfirm(null);
     } catch (err: any) {

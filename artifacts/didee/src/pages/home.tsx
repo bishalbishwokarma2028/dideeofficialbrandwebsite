@@ -344,7 +344,7 @@ export default function Home() {
               </motion.p>
               <motion.h1
                 className="font-serif font-medium text-white leading-none mb-6 drop-shadow-2xl whitespace-pre-line"
-                style={{ fontSize: "clamp(4rem, 10vw, 9rem)", letterSpacing: "0.05em" }}
+                style={{ fontSize: "clamp(2.5rem, 10vw, 9rem)", letterSpacing: "0.05em" }}
                 initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.15, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}

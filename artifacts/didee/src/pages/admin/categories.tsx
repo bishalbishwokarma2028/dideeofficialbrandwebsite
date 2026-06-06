@@ -3,6 +3,7 @@ import { useListCategories } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { apiUrl } from "@/lib/api";
 import { Plus, Trash2, Tag, X, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -49,7 +50,7 @@ export default function AdminCategories() {
     if (!form.name.trim()) { setError("Category name is required"); return; }
     setSaving(true); setError("");
     try {
-      const res = await fetch("/api/categories", {
+      const res = await fetch(apiUrl("/api/categories"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -72,7 +73,7 @@ export default function AdminCategories() {
       const parentSlug = suggestion.parent
         ? categories?.find(c => c.name === suggestion.parent)?.slug
         : undefined;
-      await fetch("/api/categories", {
+      await fetch(apiUrl("/api/categories"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -85,7 +86,7 @@ export default function AdminCategories() {
 
   async function handleDelete(slug: string) {
     try {
-      await fetch(`/api/categories/${slug}`, { method: "DELETE", credentials: "include" });
+      await fetch(apiUrl(`/api/categories/${slug}`), { method: "DELETE", credentials: "include" });
       await queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
     } catch {}
     setDeleteConfirm(null);

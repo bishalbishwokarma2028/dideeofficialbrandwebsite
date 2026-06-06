@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { apiUrl } from "@/lib/api";
 
 type UserData = {
   id: number;
@@ -25,7 +26,7 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserData | null>(null);
 
   useEffect(() => {
-    fetch("/api/auth/me", { credentials: "include" })
+    fetch(apiUrl("/api/auth/me"), { credentials: "include" })
       .then((r) => r.json())
       .then((data) => {
         if (data.authenticated) {
@@ -39,7 +40,7 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
 
   async function login(email: string, password: string) {
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(apiUrl("/api/auth/login"), {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -59,7 +60,7 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
 
   async function register(email: string, password: string, name: string, phone?: string) {
     try {
-      const res = await fetch("/api/auth/register", {
+      const res = await fetch(apiUrl("/api/auth/register"), {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -78,14 +79,14 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function logout() {
-    await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+    await fetch(apiUrl("/api/auth/logout"), { method: "POST", credentials: "include" });
     setAuthenticated(false);
     setUser(null);
   }
 
   async function updateProfile(data: { name?: string; phone?: string }) {
     try {
-      const res = await fetch("/api/auth/profile", {
+      const res = await fetch(apiUrl("/api/auth/profile"), {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

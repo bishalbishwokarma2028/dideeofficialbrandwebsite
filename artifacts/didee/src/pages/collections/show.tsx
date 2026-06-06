@@ -47,7 +47,7 @@ export default function CollectionShow() {
 
       <div className="container mx-auto px-4 mt-24">
         {productsLoading ? (
-           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+           <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 sm:gap-x-6 gap-y-8 sm:gap-y-12">
              {[...Array(8)].map((_, i) => (
                <div key={i} className="animate-pulse">
                  <div className="bg-muted aspect-[3/4] mb-4"></div>
@@ -57,7 +57,7 @@ export default function CollectionShow() {
              ))}
            </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 sm:gap-x-6 gap-y-8 sm:gap-y-12">
             {productsData?.products.map((product, index) => (
               <ProductCard key={product.id} product={product} index={index} />
             ))}

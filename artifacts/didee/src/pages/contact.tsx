@@ -1,6 +1,7 @@
 import { useState, FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, MapPin, Clock, Instagram, Facebook, Send, Check, ChevronDown, MessageCircle, Star, Eye, Award, Heart } from "lucide-react";
+import { apiUrl } from "@/lib/api";
 
 function FadeIn({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
   return (
@@ -68,7 +69,7 @@ export default function Contact() {
     setSending(true);
     setError("");
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(apiUrl("/api/contact"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

@@ -75,19 +75,19 @@ export function ProductCard({ product, index = 0 }: ProductCardProps) {
             </div>
           )}
 
-          {/* Wishlist button */}
+          {/* Wishlist button — always visible on touch, hover-only on desktop */}
           <button
             onClick={handleWishlist}
             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
-            className={`absolute top-3 right-3 w-9 h-9 flex items-center justify-center bg-white/90 backdrop-blur-sm border transition-all duration-200 shadow-sm opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 ${wishlisted ? "border-[#C9A86A]" : "border-transparent hover:border-[#C9A86A]"}`}
+            className={`absolute top-3 right-3 w-9 h-9 flex items-center justify-center bg-white/90 backdrop-blur-sm border transition-all duration-200 shadow-sm sm:opacity-0 sm:group-hover:opacity-100 hover:scale-110 active:scale-95 ${wishlisted ? "border-[#C9A86A]" : "border-transparent hover:border-[#C9A86A]"}`}
           >
             <Heart
               className={`w-4 h-4 transition-colors duration-200 ${wishlisted ? "fill-[#C9A86A] text-[#C9A86A]" : "text-foreground"}`}
             />
           </button>
 
-          {/* Quick view overlay on hover */}
-          <div className="absolute bottom-0 left-0 right-0 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+          {/* Quick view overlay — hover on desktop, always-visible on mobile */}
+          <div className="absolute bottom-0 left-0 right-0 sm:translate-y-full sm:group-hover:translate-y-0 translate-y-0 transition-transform duration-300">
             <div className="bg-white/95 backdrop-blur-sm py-3 text-center text-[11px] font-black tracking-[0.2em] uppercase text-foreground hover:bg-[#C9A86A] hover:text-white transition-colors">
               Quick View
             </div>

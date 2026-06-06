@@ -8,14 +8,14 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.warn("[Supabase] SUPABASE_URL or SUPABASE_ANON_KEY not set — Supabase sync disabled.");
 }
 
-// Admin client (service role key) — can create confirmed users immediately
+// Admin client (service role key) — can create confirmed users and manage storage
 const supabaseAdmin = supabaseUrl && supabaseServiceRoleKey
   ? createClient(supabaseUrl, supabaseServiceRoleKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     })
   : null;
 
-// Anon client — fallback (users appear as "Unconfirmed" in Supabase dashboard)
+// Anon client — fallback
 export const supabase = supabaseUrl && supabaseAnonKey
   ? createClient(supabaseUrl, supabaseAnonKey, {
       auth: { persistSession: false, autoRefreshToken: false },
@@ -28,7 +28,6 @@ export async function syncUserToSupabase(opts: {
   name: string;
   phone?: string | null;
 }): Promise<void> {
-  // Prefer admin client — creates confirmed users that appear immediately in Supabase Auth
   if (supabaseAdmin) {
     try {
       const { data, error } = await supabaseAdmin.auth.admin.createUser({
@@ -53,8 +52,6 @@ export async function syncUserToSupabase(opts: {
     return;
   }
 
-  // Fallback: anon signUp — users appear as Unconfirmed until email is confirmed
-  // To fix: disable "Confirm email" in Supabase Dashboard > Authentication > Providers > Email
   if (supabase) {
     try {
       const { error } = await supabase.auth.signUp({
@@ -78,4 +75,48 @@ export async function syncUserToSupabase(opts: {
       console.warn("[Supabase] Sync failed (non-fatal):", err);
     }
   }
+}
+
+const STORAGE_BUCKET = "didee-uploads";
+
+async function ensureBucket(): Promise<void> {
+  if (!supabaseAdmin) return;
+  const { data: buckets } = await supabaseAdmin.storage.listBuckets();
+  const exists = buckets?.some((b) => b.name === STORAGE_BUCKET);
+  if (!exists) {
+    await supabaseAdmin.storage.createBucket(STORAGE_BUCKET, { public: true });
+  }
+}
+
+let bucketReady = false;
+
+export async function uploadFileToSupabase(
+  buffer: Buffer,
+  filename: string,
+  mimetype: string,
+): Promise<string | null> {
+  if (!supabaseAdmin || !supabaseUrl) return null;
+
+  if (!bucketReady) {
+    await ensureBucket();
+    bucketReady = true;
+  }
+
+  const { data, error } = await supabaseAdmin.storage
+    .from(STORAGE_BUCKET)
+    .upload(filename, buffer, {
+      contentType: mimetype,
+      upsert: false,
+    });
+
+  if (error) {
+    console.error("[Supabase Storage] Upload error:", error.message);
+    return null;
+  }
+
+  const { data: urlData } = supabaseAdmin.storage
+    .from(STORAGE_BUCKET)
+    .getPublicUrl(data.path);
+
+  return urlData.publicUrl;
 }

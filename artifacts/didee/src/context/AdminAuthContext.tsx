@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { apiUrl } from "@/lib/api";
 
 type AdminAuthState = {
   loading: boolean;
@@ -16,7 +17,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/admin/me", { credentials: "include" })
+    fetch(apiUrl("/api/admin/me"), { credentials: "include" })
       .then((r) => r.json())
       .then((data) => {
         if (data.authenticated) {
@@ -30,7 +31,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
 
   async function login(emailInput: string, password: string) {
     try {
-      const res = await fetch("/api/admin/login", {
+      const res = await fetch(apiUrl("/api/admin/login"), {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -49,7 +50,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function logout() {
-    await fetch("/api/admin/logout", { method: "POST", credentials: "include" });
+    await fetch(apiUrl("/api/admin/logout"), { method: "POST", credentials: "include" });
     setAuthenticated(false);
     setEmail(null);
   }

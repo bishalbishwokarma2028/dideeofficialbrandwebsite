@@ -520,7 +520,7 @@ export default function ProductShow() {
         <div className="container mx-auto px-4 border-t border-border pt-20">
           <p className="text-[11px] tracking-[0.4em] uppercase text-muted-foreground font-black mb-3 text-center">You May Also Like</p>
           <h2 className="font-serif text-4xl font-medium mb-12 text-center">Complete the Look</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-3 sm:gap-x-6 gap-y-8 sm:gap-y-12">
             {relatedProducts.slice(0, 4).map((rp, index) => (
               <ProductCard key={rp.id} product={rp} index={index} />
             ))}

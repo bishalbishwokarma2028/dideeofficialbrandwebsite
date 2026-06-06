@@ -3,6 +3,7 @@ import { Search, ShoppingBag, User, Menu, X, LogOut, ChevronDown, ArrowRight, He
 import { useCartContext } from "@/context/CartContext";
 import { useCustomerAuth } from "@/context/CustomerAuthContext";
 import { useAdminAuth } from "@/context/AdminAuthContext";
+import { apiUrl } from "@/lib/api";
 import { useWishlist } from "@/context/WishlistContext";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -20,7 +21,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
     if (!q.trim()) { setResults(null); return; }
     setLoading(true);
     try {
-      const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+      const res = await fetch(apiUrl(`/api/search?q=${encodeURIComponent(q)}`));
       const data = await res.json();
       setResults(data);
     } catch { setResults(null); }

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Save, RefreshCw, ChevronRight, Home, ShoppingBag, FolderTree, Image, BookOpen, Info, Clock, Users, Wrench, Phone, Plus, Trash2, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { apiUrl } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 
 const SECTIONS = [
@@ -266,7 +267,7 @@ export default function AdminContent() {
   const loadAll = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/content", { credentials: "include" });
+      const res = await fetch(apiUrl("/api/content"), { credentials: "include" });
       const data = await res.json();
       setContentMap(data);
     } catch {
@@ -287,7 +288,7 @@ export default function AdminContent() {
     if (!dirty) return;
     setSaving(true);
     try {
-      const res = await fetch(`/api/content/${activeSectionId}`, {
+      const res = await fetch(apiUrl(`/api/content/${activeSectionId}`), {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

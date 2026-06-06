@@ -3,6 +3,7 @@ import { Eye, EyeOff, Plus, Trash2, Shield, Key, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
+import { apiUrl } from "@/lib/api";
 import { useAdminAuth } from "@/context/AdminAuthContext";
 
 type AdminUser = {
@@ -40,7 +41,7 @@ export default function AdminSettings() {
     setAddAdminError("");
     setAddAdminLoading(true);
     try {
-      const res = await fetch("/api/admin/users", {
+      const res = await fetch(apiUrl("/api/admin/users"), {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -77,7 +78,7 @@ export default function AdminSettings() {
     }
     setPwLoading(true);
     try {
-      const res = await fetch("/api/admin/change-password", {
+      const res = await fetch(apiUrl("/api/admin/change-password"), {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Instagram, Facebook, Mail, Check, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { apiUrl } from "@/lib/api";
 
 export function Footer() {
   const [email, setEmail] = useState("");
@@ -11,7 +12,7 @@ export function Footer() {
     if (!email.trim()) return;
     setSubState("loading");
     try {
-      const res = await fetch("/api/newsletter/subscribe", {
+      const res = await fetch(apiUrl("/api/newsletter/subscribe"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

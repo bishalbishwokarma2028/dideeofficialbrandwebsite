@@ -3,6 +3,7 @@ import { useListJournalPosts } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { apiUrl } from "@/lib/api";
 import { Plus, Search, Edit, X, Eye, EyeOff, Trash2, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -101,7 +102,7 @@ export default function AdminJournal() {
 
   async function handleDelete(id: number) {
     try {
-      await fetch(`/api/journal/${id}`, { method: "DELETE", credentials: "include" });
+      await fetch(apiUrl(`/api/journal/${id}`), { method: "DELETE", credentials: "include" });
       await queryClient.invalidateQueries({ queryKey: ["/api/journal"] });
     } catch {}
     setDeleteConfirm(null);
@@ -109,7 +110,7 @@ export default function AdminJournal() {
 
   async function togglePublished(post: any) {
     try {
-      await fetch(`/api/journal/${post.id}`, {
+      await fetch(apiUrl(`/api/journal/${post.id}`), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
