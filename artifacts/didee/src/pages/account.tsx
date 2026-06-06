@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { User, MapPin, LogOut, Package, Plus, Trash2, Check, Loader2, MessageCircle, Clock, ChevronRight, AlertCircle, XCircle } from "lucide-react";
 import { useCustomerAuth } from "@/context/CustomerAuthContext";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, authedFetch } from "@/lib/api";
 
 type Tab = "orders" | "messages" | "profile" | "addresses" | "logout";
 
@@ -95,7 +95,7 @@ function OrderCard({ order, onCancel }: { order: Order; onCancel: (id: number) =
     if (!confirm("Are you sure you want to cancel this order?")) return;
     setCancelling(true);
     try {
-      const res = await fetch(apiUrl(`/api/orders/${order.id}`), { method: "DELETE", credentials: "include" });
+      const res = await authedFetch(apiUrl(`/api/orders/${order.id}`), { method: "DELETE" });
       if (res.ok) onCancel(order.id);
       else {
         const data = await res.json();
@@ -231,7 +231,7 @@ export default function Account() {
   const loadOrders = useCallback(async () => {
     setOrdersLoading(true);
     try {
-      const res = await fetch(apiUrl("/api/auth/orders"), { credentials: "include" });
+      const res = await authedFetch(apiUrl("/api/auth/orders"));
       if (res.ok) setOrders(await res.json());
     } finally {
       setOrdersLoading(false);
@@ -271,7 +271,7 @@ export default function Account() {
   async function loadMessages() {
     setMessagesLoading(true);
     try {
-      const res = await fetch(apiUrl("/api/contact/my"), { credentials: "include" });
+      const res = await authedFetch(apiUrl("/api/contact/my"));
       if (res.ok) setMessages(await res.json());
     } finally {
       setMessagesLoading(false);

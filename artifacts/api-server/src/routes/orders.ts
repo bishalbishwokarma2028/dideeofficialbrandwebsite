@@ -3,6 +3,7 @@ import { db } from "@workspace/db";
 import { ordersTable, orderItemsTable, productsTable } from "@workspace/db";
 import { eq, desc, and } from "drizzle-orm";
 import { CreateOrderBody, UpdateOrderBody } from "@workspace/api-zod";
+import { getUserIdFromRequest } from "../lib/jwt.js";
 
 const router = Router();
 
@@ -40,11 +41,11 @@ router.get("/", async (req, res) => {
   }
 });
 
-// POST /api/orders  (place order — user must be logged in)
+// POST /api/orders  (place order — user token optional)
 router.post("/", async (req, res) => {
   try {
     const body = CreateOrderBody.parse(req.body);
-    const userId = (req.session as any).userId ?? null;
+    const userId = getUserIdFromRequest(req);
     const subtotal = body.items.reduce((s, i) => s + i.price * i.quantity, 0);
     const shippingCost = subtotal >= 3000 ? 0 : 100;
     const total = subtotal + shippingCost;
@@ -118,7 +119,7 @@ router.patch("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const orderId = parseInt(req.params.id);
-    const userId = (req.session as any).userId;
+    const userId = getUserIdFromRequest(req);
 
     const [order] = await db.select().from(ordersTable).where(eq(ordersTable.id, orderId));
     if (!order) return res.status(404).json({ error: "Order not found" });

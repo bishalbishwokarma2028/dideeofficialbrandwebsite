@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, adminFetch, setAdminToken, clearAdminToken } from "@/lib/api";
 
 type AdminAuthState = {
   loading: boolean;
@@ -17,7 +17,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(apiUrl("/api/admin/me"), { credentials: "include" })
+    adminFetch(apiUrl("/api/admin/me"))
       .then((r) => r.json())
       .then((data) => {
         if (data.authenticated) {
@@ -39,6 +39,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
       });
       const data = await res.json();
       if (res.ok) {
+        if (data.token) setAdminToken(data.token);
         setAuthenticated(true);
         setEmail(data.email);
         return { ok: true };
@@ -50,6 +51,7 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function logout() {
+    clearAdminToken();
     await fetch(apiUrl("/api/admin/logout"), { method: "POST", credentials: "include" });
     setAuthenticated(false);
     setEmail(null);

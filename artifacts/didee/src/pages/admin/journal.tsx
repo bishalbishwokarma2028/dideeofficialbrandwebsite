@@ -3,7 +3,7 @@ import { useListJournalPosts } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, adminFetch } from "@/lib/api";
 import { Plus, Search, Edit, X, Eye, EyeOff, Trash2, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -71,12 +71,11 @@ export default function AdminJournal() {
     if (!form.title.trim()) { setError("Title is required"); return; }
     setSaving(true); setError("");
     try {
-      const url = editPost ? `/api/journal/${editPost.id}` : "/api/journal";
+      const url = editPost ? apiUrl(`/api/journal/${editPost.id}`) : apiUrl("/api/journal");
       const method = editPost ? "PATCH" : "POST";
-      const res = await fetch(url, {
+      const res = await adminFetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({
           title: form.title.trim(),
           excerpt: form.excerpt.trim() || undefined,
@@ -102,7 +101,7 @@ export default function AdminJournal() {
 
   async function handleDelete(id: number) {
     try {
-      await fetch(apiUrl(`/api/journal/${id}`), { method: "DELETE", credentials: "include" });
+      await adminFetch(apiUrl(`/api/journal/${id}`), { method: "DELETE" });
       await queryClient.invalidateQueries({ queryKey: ["/api/journal"] });
     } catch {}
     setDeleteConfirm(null);
@@ -110,10 +109,9 @@ export default function AdminJournal() {
 
   async function togglePublished(post: any) {
     try {
-      await fetch(apiUrl(`/api/journal/${post.id}`), {
+      await adminFetch(apiUrl(`/api/journal/${post.id}`), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ published: !post.published }),
       });
       await queryClient.invalidateQueries({ queryKey: ["/api/journal"] });

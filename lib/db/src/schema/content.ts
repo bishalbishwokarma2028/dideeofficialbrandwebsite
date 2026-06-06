@@ -72,6 +72,12 @@ export const newsletterSubscribersTable = pgTable("newsletter_subscribers", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
+export const siteContentTable = pgTable("site_content", {
+  section: text("section").primaryKey(),
+  data: jsonb("data").$type<Record<string, unknown>>().notNull().default({}),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
 export const insertReviewSchema = createInsertSchema(reviewsTable).omit({ id: true, createdAt: true });
 export const insertJournalPostSchema = createInsertSchema(journalPostsTable).omit({ id: true, createdAt: true });
 export const insertLookbookItemSchema = createInsertSchema(lookbookItemsTable).omit({ id: true, createdAt: true });
@@ -91,3 +97,4 @@ export type ContactMessage = typeof contactMessagesTable.$inferSelect;
 export type InsertContactMessage = z.infer<typeof insertContactMessageSchema>;
 export type NewsletterSubscriber = typeof newsletterSubscribersTable.$inferSelect;
 export type InsertNewsletterSubscriber = z.infer<typeof insertNewsletterSubscriberSchema>;
+export type SiteContent = typeof siteContentTable.$inferSelect;

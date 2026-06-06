@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search, Edit, Trash2, X, Upload, ImagePlus, ToggleLeft, ToggleRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, adminFetch } from "@/lib/api";
 
 type ProductForm = {
   name: string;
@@ -101,10 +101,9 @@ export default function AdminProducts() {
     try {
       const fd = new FormData();
       fd.append("file", file);
-      const res = await fetch(apiUrl("/api/upload"), {
+      const res = await adminFetch(apiUrl("/api/upload"), {
         method: "POST",
         body: fd,
-        credentials: "include",
       });
       if (!res.ok) {
         const errData = await res.json().catch(() => ({ error: `HTTP ${res.status}` }));
@@ -154,9 +153,8 @@ export default function AdminProducts() {
 
       const url = modal.mode === "create" ? apiUrl("/api/products") : apiUrl(`/api/products/${modal.slug}`);
       const method = modal.mode === "create" ? "POST" : "PATCH";
-      const res = await fetch(url, {
+      const res = await adminFetch(url, {
         method,
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });

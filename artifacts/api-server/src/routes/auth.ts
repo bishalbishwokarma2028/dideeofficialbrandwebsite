@@ -3,7 +3,7 @@ import { db, usersTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { scryptSync, randomBytes, timingSafeEqual } from "crypto";
 import { syncUserToSupabase } from "../lib/supabase.js";
-import { signUserToken, verifyToken, USER_COOKIE, COOKIE_OPTS } from "../lib/jwt.js";
+import { signUserToken, verifyToken, extractUserToken, getUserIdFromRequest, USER_COOKIE, COOKIE_OPTS } from "../lib/jwt.js";
 
 const router = Router();
 
@@ -57,7 +57,7 @@ router.post("/register", async (req, res) => {
 
     const token = signUserToken(user.id, user.email, user.name);
     res.cookie(USER_COOKIE, token, COOKIE_OPTS);
-    res.json({ success: true, user: { id: user.id, email: user.email, name: user.name, phone: user.phone } });
+    res.json({ success: true, token, user: { id: user.id, email: user.email, name: user.name, phone: user.phone } });
 
     syncUserToSupabase({ email: email.toLowerCase().trim(), password, name: name.trim(), phone: phone?.trim() });
   } catch (err: any) {
@@ -84,7 +84,7 @@ router.post("/login", async (req, res) => {
 
     const token = signUserToken(user.id, user.email, user.name);
     res.cookie(USER_COOKIE, token, COOKIE_OPTS);
-    res.json({ success: true, user: { id: user.id, email: user.email, name: user.name, phone: user.phone } });
+    res.json({ success: true, token, user: { id: user.id, email: user.email, name: user.name, phone: user.phone } });
   } catch (err: any) {
     req.log.error(err, "Login error");
     res.status(500).json({ error: "Login failed. Please try again." });
@@ -99,39 +99,24 @@ router.post("/logout", (_req, res) => {
 
 // GET /api/auth/me
 router.get("/me", async (req, res) => {
-  const token = req.cookies?.[USER_COOKIE];
-  if (!token) {
+  const userId = getUserIdFromRequest(req);
+  if (!userId) {
     res.status(401).json({ authenticated: false });
     return;
   }
   try {
-    const payload = verifyToken(token);
-    const userId = payload?.userId;
-    if (!userId) { res.status(401).json({ authenticated: false }); return; }
-
     const [user] = await db.select().from(usersTable).where(eq(usersTable.id, userId)).limit(1);
     if (!user) { res.status(401).json({ authenticated: false }); return; }
-
     res.json({ authenticated: true, user: { id: user.id, email: user.email, name: user.name, phone: user.phone } });
   } catch {
-    res.clearCookie(USER_COOKIE, { path: "/" });
     res.status(401).json({ authenticated: false });
   }
 });
 
 // PATCH /api/auth/profile
 router.patch("/profile", async (req, res) => {
-  const token = req.cookies?.[USER_COOKIE];
-  if (!token) { res.status(401).json({ error: "Not authenticated" }); return; }
-
-  let userId: number;
-  try {
-    const payload = verifyToken(token);
-    userId = payload?.userId;
-    if (!userId) throw new Error("invalid token");
-  } catch {
-    res.status(401).json({ error: "Not authenticated" }); return;
-  }
+  const userId = getUserIdFromRequest(req);
+  if (!userId) { res.status(401).json({ error: "Not authenticated" }); return; }
 
   const { name, phone } = req.body as { name?: string; phone?: string };
   try {
@@ -142,7 +127,7 @@ router.patch("/profile", async (req, res) => {
 
     const newToken = signUserToken(user.id, user.email, user.name);
     res.cookie(USER_COOKIE, newToken, COOKIE_OPTS);
-    res.json({ user: { id: user.id, email: user.email, name: user.name, phone: user.phone } });
+    res.json({ token: newToken, user: { id: user.id, email: user.email, name: user.name, phone: user.phone } });
   } catch {
     res.status(500).json({ error: "Failed to update profile" });
   }
@@ -150,17 +135,8 @@ router.patch("/profile", async (req, res) => {
 
 // GET /api/auth/orders
 router.get("/orders", async (req, res) => {
-  const token = req.cookies?.[USER_COOKIE];
-  if (!token) { res.status(401).json({ error: "Not authenticated" }); return; }
-
-  let userId: number;
-  try {
-    const payload = verifyToken(token);
-    userId = payload?.userId;
-    if (!userId) throw new Error("invalid token");
-  } catch {
-    res.status(401).json({ error: "Not authenticated" }); return;
-  }
+  const userId = getUserIdFromRequest(req);
+  if (!userId) { res.status(401).json({ error: "Not authenticated" }); return; }
 
   try {
     const { db: dbImport, ordersTable, orderItemsTable } = await import("@workspace/db");

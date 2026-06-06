@@ -2,3 +2,4 @@
 - [Supabase Sync](supabase-sync.md) — Service role key set as SUPABASE_SERVICE_ROLE_KEY; uses auth.admin.createUser with email_confirm:true for instant confirmed users.
 - [Admin Navigation](admin-nav.md) — Admin routes must NOT use AnimatePresence (causes remount + nav disruption); skip logo transition for /admin/* paths too.
 - [Auth Gate](auth-gate.md) — Cart and wishlist require sign-in; checked in ProductCard and ProductShow via useCustomerAuth before any add/toggle action.
+- [Vercel Auth Architecture](vercel-auth.md) — Cross-domain auth uses Bearer tokens in localStorage, NOT cookies; token returned in login/register response body; authedFetch/adminFetch helpers in api.ts add Authorization header.

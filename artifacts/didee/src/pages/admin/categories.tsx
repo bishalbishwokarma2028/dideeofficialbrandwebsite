@@ -3,7 +3,7 @@ import { useListCategories } from "@workspace/api-client-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, adminFetch } from "@/lib/api";
 import { Plus, Trash2, Tag, X, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -50,10 +50,9 @@ export default function AdminCategories() {
     if (!form.name.trim()) { setError("Category name is required"); return; }
     setSaving(true); setError("");
     try {
-      const res = await fetch(apiUrl("/api/categories"), {
+      const res = await adminFetch(apiUrl("/api/categories"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ name: form.name.trim(), parentSlug: form.parentSlug || undefined }),
       });
       if (!res.ok) { const d = await res.json(); throw new Error(d.error || "Failed to save"); }
@@ -73,10 +72,9 @@ export default function AdminCategories() {
       const parentSlug = suggestion.parent
         ? categories?.find(c => c.name === suggestion.parent)?.slug
         : undefined;
-      await fetch(apiUrl("/api/categories"), {
+      await adminFetch(apiUrl("/api/categories"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ name: suggestion.name, parentSlug }),
       });
       await queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
@@ -86,7 +84,7 @@ export default function AdminCategories() {
 
   async function handleDelete(slug: string) {
     try {
-      await fetch(apiUrl(`/api/categories/${slug}`), { method: "DELETE", credentials: "include" });
+      await adminFetch(apiUrl(`/api/categories/${slug}`), { method: "DELETE" });
       await queryClient.invalidateQueries({ queryKey: ["/api/categories"] });
     } catch {}
     setDeleteConfirm(null);

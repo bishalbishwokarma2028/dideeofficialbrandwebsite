@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, authedFetch, setUserToken, clearUserToken, getUserToken } from "@/lib/api";
 
 type UserData = {
   id: number;
@@ -26,7 +26,7 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserData | null>(null);
 
   useEffect(() => {
-    fetch(apiUrl("/api/auth/me"), { credentials: "include" })
+    authedFetch(apiUrl("/api/auth/me"))
       .then((r) => r.json())
       .then((data) => {
         if (data.authenticated) {
@@ -48,6 +48,7 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
       });
       const data = await res.json();
       if (res.ok) {
+        if (data.token) setUserToken(data.token);
         setAuthenticated(true);
         setUser(data.user);
         return { ok: true };
@@ -68,6 +69,7 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
       });
       const data = await res.json();
       if (res.ok) {
+        if (data.token) setUserToken(data.token);
         setAuthenticated(true);
         setUser(data.user);
         return { ok: true };
@@ -79,6 +81,7 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function logout() {
+    clearUserToken();
     await fetch(apiUrl("/api/auth/logout"), { method: "POST", credentials: "include" });
     setAuthenticated(false);
     setUser(null);
@@ -86,14 +89,14 @@ export function CustomerAuthProvider({ children }: { children: ReactNode }) {
 
   async function updateProfile(data: { name?: string; phone?: string }) {
     try {
-      const res = await fetch(apiUrl("/api/auth/profile"), {
+      const res = await authedFetch(apiUrl("/api/auth/profile"), {
         method: "PATCH",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
       const json = await res.json();
       if (res.ok) {
+        if (json.token) setUserToken(json.token);
         setUser(json.user);
         return { ok: true };
       }

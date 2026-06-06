@@ -2,10 +2,11 @@ import { Router } from "express";
 import { db } from "@workspace/db";
 import { contactMessagesTable, insertContactMessageSchema } from "@workspace/db";
 import { eq } from "drizzle-orm";
+import { isAdminRequest, getUserIdFromRequest } from "../lib/jwt.js";
 
 const router = Router();
 
-// POST /api/contact — submit a contact message
+// POST /api/contact — submit a contact message (public)
 router.post("/", async (req, res) => {
   const parsed = insertContactMessageSchema.safeParse(req.body);
   if (!parsed.success) {
@@ -18,7 +19,7 @@ router.post("/", async (req, res) => {
 
 // GET /api/contact — admin: list all messages
 router.get("/", async (req, res) => {
-  if (!(req.session as any).adminAuthenticated) {
+  if (!isAdminRequest(req)) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
@@ -31,7 +32,7 @@ router.get("/", async (req, res) => {
 
 // GET /api/contact/my — user: get own messages by email
 router.get("/my", async (req, res) => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Unauthorized" });
     return;
@@ -52,7 +53,7 @@ router.get("/my", async (req, res) => {
 
 // PATCH /api/contact/:id/reply — admin: reply to a message
 router.patch("/:id/reply", async (req, res) => {
-  if (!(req.session as any).adminAuthenticated) {
+  if (!isAdminRequest(req)) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }
@@ -80,7 +81,7 @@ router.patch("/:id/reply", async (req, res) => {
 
 // PATCH /api/contact/:id/status — admin: mark as read/unread
 router.patch("/:id/status", async (req, res) => {
-  if (!(req.session as any).adminAuthenticated) {
+  if (!isAdminRequest(req)) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }

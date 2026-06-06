@@ -3,7 +3,7 @@ import { useListOrders } from "@workspace/api-client-react";
 import { Search, Eye, X, MapPin, Phone, Mail, User, CreditCard, Package, StickyNote, ChevronDown } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, adminFetch } from "@/lib/api";
 
 type OrderItem = {
   id: number;
@@ -79,10 +79,9 @@ function OrderDetailPanel({ order, onClose, onStatusChange }: {
   async function handleStatusChange(newStatus: string) {
     setUpdatingStatus(true);
     try {
-      const res = await fetch(apiUrl(`/api/orders/${order.id}`), {
+      const res = await adminFetch(apiUrl(`/api/orders/${order.id}`), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ status: newStatus }),
       });
       if (res.ok) {

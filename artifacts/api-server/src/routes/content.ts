@@ -1,10 +1,8 @@
 import { Router } from "express";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const CONTENT_FILE = path.join(__dirname, "..", "..", "site-content.json");
+import { db } from "@workspace/db";
+import { siteContentTable } from "@workspace/db";
+import { eq } from "drizzle-orm";
+import { isAdminRequest } from "../lib/jwt.js";
 
 const DEFAULT_CONTENT: Record<string, Record<string, unknown>> = {
   home: {
@@ -25,23 +23,23 @@ const DEFAULT_CONTENT: Record<string, Record<string, unknown>> = {
   },
   collections: {
     title: "The DIDEE World",
-    subtitle: "Each DIDEE collection is a distinct expression of Nepalese street culture — fearless drops that blend global aesthetics with Kathmandu's raw, unapologetic energy.",
+    subtitle: "Each DIDEE collection is a distinct expression of Nepalese street culture.",
     heroImage: "/images/collections-hero.jpg",
   },
   lookbook: {
     title: "LOOKBOOK",
-    subtitle: "Each season, DIDEE curates a visual story that goes beyond fashion. Our lookbook is a window into the streets of Kathmandu — raw, unapologetic, and deeply human.",
+    subtitle: "Each season, DIDEE curates a visual story that goes beyond fashion.",
     images: [],
   },
   journal: {
     title: "THE JOURNAL",
-    subtitle: "Stories from the streets of Kathmandu. Culture, craft, and the people behind every stitch.",
+    subtitle: "Stories from the streets of Kathmandu.",
     heroImage: "",
   },
   about: {
     title: "About DIDEE",
     intro: "DIDEE is a Nepalese fashion brand built on the belief that world-class design shouldn't require a world-class price tag.",
-    body: "We are built in Nepal, made for everyone. Every piece we create carries the spirit of Kathmandu — its raw energy, its fearless youth, and its unapologetic creativity.",
+    body: "We are built in Nepal, made for everyone.",
     images: [],
     stats: [
       { label: "Founded", value: "2025" },
@@ -52,18 +50,18 @@ const DEFAULT_CONTENT: Record<string, Record<string, unknown>> = {
   "our-story": {
     title: "Our Story",
     chapters: [
-      { heading: "The Beginning", body: "DIDEE was born from the streets of Kathmandu, inspired by the fearless youth culture that pulses through the city." },
-      { heading: "The Vision", body: "We believe fashion should be accessible, bold, and deeply rooted in identity. Not just aesthetics — but a statement." },
-      { heading: "The Future", body: "DIDEE is growing. New collections, new collaborations, new ways to express the Nepalese spirit to the world." },
+      { heading: "The Beginning", body: "DIDEE was born from the streets of Kathmandu." },
+      { heading: "The Vision", body: "We believe fashion should be accessible, bold, and deeply rooted in identity." },
+      { heading: "The Future", body: "DIDEE is growing. New collections, new collaborations." },
     ],
     heroImage: "",
   },
   "who-we-are": {
     title: "Who We Are",
-    intro: "DIDEE is a Nepalese fashion brand built on the belief that world-class design shouldn't require a world-class price tag — and that the most powerful style comes from the streets, not the runway.",
+    intro: "DIDEE is a Nepalese fashion brand.",
     founderName: "Niraj Onta",
     founderTitle: "Founder & Creative Director",
-    founderBio: "Raised in the streets of Kathmandu, Niraj founded DIDEE with one mission: to give Nepalese youth a fashion brand they could truly call their own.",
+    founderBio: "Raised in the streets of Kathmandu, Niraj founded DIDEE with one mission.",
     founderImage: "",
     teamImages: [],
   },
@@ -74,12 +72,12 @@ const DEFAULT_CONTENT: Record<string, Record<string, unknown>> = {
       { title: "Custom Orders", description: "Work directly with our team to create a piece that's uniquely yours." },
       { title: "Bulk & Wholesale", description: "Partner with us for bulk orders, retail partnerships, and collaborative drops." },
       { title: "Styling Consultation", description: "Book a session with a DIDEE stylist to curate your perfect look." },
-      { title: "Brand Collaboration", description: "Let's build something together. We're open to creative partnerships." },
+      { title: "Brand Collaboration", description: "Let's build something together." },
     ],
   },
   contact: {
     title: "Contact Us",
-    subtitle: "We'd love to hear from you. Reach out for orders, collabs, or just to say hello.",
+    subtitle: "We'd love to hear from you.",
     address: "Kathmandu, Nepal",
     email: "hello@didee.com.np",
     phone: "+977 98XXXXXXXX",
@@ -90,44 +88,57 @@ const DEFAULT_CONTENT: Record<string, Record<string, unknown>> = {
   },
 };
 
-function readContent(): Record<string, Record<string, unknown>> {
+async function getSection(section: string): Promise<Record<string, unknown>> {
   try {
-    if (fs.existsSync(CONTENT_FILE)) {
-      return JSON.parse(fs.readFileSync(CONTENT_FILE, "utf-8"));
-    }
-  } catch {
-    // fall through to defaults
-  }
-  return DEFAULT_CONTENT;
+    const [row] = await db.select().from(siteContentTable).where(eq(siteContentTable.section, section)).limit(1);
+    if (row) return row.data;
+  } catch {}
+  return DEFAULT_CONTENT[section] ?? {};
 }
 
-function writeContent(data: Record<string, Record<string, unknown>>) {
-  fs.writeFileSync(CONTENT_FILE, JSON.stringify(data, null, 2), "utf-8");
+async function getAllContent(): Promise<Record<string, Record<string, unknown>>> {
+  try {
+    const rows = await db.select().from(siteContentTable);
+    const result: Record<string, Record<string, unknown>> = { ...DEFAULT_CONTENT };
+    for (const row of rows) {
+      result[row.section] = row.data;
+    }
+    return result;
+  } catch {
+    return DEFAULT_CONTENT;
+  }
+}
+
+async function saveSection(section: string, data: Record<string, unknown>): Promise<void> {
+  await db
+    .insert(siteContentTable)
+    .values({ section, data, updatedAt: new Date() })
+    .onConflictDoUpdate({ target: siteContentTable.section, set: { data, updatedAt: new Date() } });
 }
 
 const router = Router();
 
-function requireAdmin(req: any, res: any, next: any) {
-  if (req.session?.adminAuthenticated) return next();
-  res.status(401).json({ error: "Unauthorized" });
-}
-
-router.get("/", (_req, res) => {
-  res.json(readContent());
+router.get("/", async (_req, res) => {
+  res.json(await getAllContent());
 });
 
-router.get("/:section", (req, res) => {
-  const content = readContent();
-  const section = content[req.params.section];
-  if (!section) return res.json(DEFAULT_CONTENT[req.params.section] ?? {});
-  res.json(section);
+router.get("/:section", async (req, res) => {
+  res.json(await getSection(req.params.section));
 });
 
-router.put("/:section", requireAdmin, (req, res) => {
-  const content = readContent();
-  content[req.params.section] = { ...(content[req.params.section] ?? {}), ...req.body };
-  writeContent(content);
-  res.json({ ok: true, section: req.params.section, data: content[req.params.section] });
+router.put("/:section", async (req, res) => {
+  if (!isAdminRequest(req)) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+  try {
+    const existing = await getSection(req.params.section);
+    const merged = { ...existing, ...req.body };
+    await saveSection(req.params.section, merged);
+    res.json({ ok: true, section: req.params.section, data: merged });
+  } catch (e: any) {
+    res.status(500).json({ error: e.message });
+  }
 });
 
 export default router;

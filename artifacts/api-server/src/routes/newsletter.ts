@@ -2,6 +2,7 @@ import { Router } from "express";
 import { db } from "@workspace/db";
 import { newsletterSubscribersTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
+import { isAdminRequest } from "../lib/jwt.js";
 
 const router = Router();
 
@@ -35,7 +36,7 @@ router.post("/subscribe", async (req, res) => {
 
 // GET /api/newsletter/subscribers — admin only
 router.get("/subscribers", async (req, res) => {
-  if (!(req.session as any).adminAuthenticated) {
+  if (!isAdminRequest(req)) {
     res.status(401).json({ error: "Unauthorized" });
     return;
   }

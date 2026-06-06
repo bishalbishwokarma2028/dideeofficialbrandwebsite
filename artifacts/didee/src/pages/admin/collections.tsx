@@ -3,7 +3,7 @@ import { useListCollections } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Plus, Search, Edit, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, adminFetch } from "@/lib/api";
 import { motion, AnimatePresence } from "framer-motion";
 
 type CollectionForm = {
@@ -49,9 +49,8 @@ export default function AdminCollections() {
     }
     setSaving(true);
     try {
-      const res = await fetch(apiUrl("/api/collections"), {
+      const res = await adminFetch(apiUrl("/api/collections"), {
         method: "POST",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: form.name.trim(),

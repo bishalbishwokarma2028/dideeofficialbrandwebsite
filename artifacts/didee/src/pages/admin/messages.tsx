@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { MessageCircle, Send, Check, Clock, Mail, Phone, RefreshCw, ChevronDown, ChevronUp } from "lucide-react";
-import { apiUrl } from "@/lib/api";
+import { apiUrl, adminFetch } from "@/lib/api";
 
 type ContactMessage = {
   id: number;
@@ -33,7 +33,7 @@ export default function AdminMessages() {
   async function load() {
     setLoading(true);
     try {
-      const res = await fetch(apiUrl("/api/contact"), { credentials: "include" });
+      const res = await adminFetch(apiUrl("/api/contact"));
       if (res.ok) setMessages(await res.json());
     } finally {
       setLoading(false);
@@ -47,10 +47,9 @@ export default function AdminMessages() {
     if (!text) return;
     setSending(id);
     try {
-      const res = await fetch(apiUrl(`/api/contact/${id}/reply`), {
+      const res = await adminFetch(apiUrl(`/api/contact/${id}/reply`), {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({ reply: text }),
       });
       if (res.ok) {
@@ -64,10 +63,9 @@ export default function AdminMessages() {
   }
 
   async function markRead(id: number) {
-    await fetch(apiUrl(`/api/contact/${id}/status`), {
+    await adminFetch(apiUrl(`/api/contact/${id}/status`), {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
       body: JSON.stringify({ status: "read" }),
     });
     setMessages(m => m.map(msg => msg.id === id ? { ...msg, status: "read" } : msg));
