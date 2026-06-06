@@ -1,0 +1,42 @@
+import { Router, type IRouter } from "express";
+import healthRouter from "./health";
+import productsRouter from "./products";
+import collectionsRouter from "./collections";
+import categoriesRouter from "./categories";
+import cartRouter from "./cart";
+import ordersRouter from "./orders";
+import reviewsRouter from "./reviews";
+import journalRouter from "./journal";
+import lookbookRouter from "./lookbook";
+import customersRouter from "./customers";
+import dashboardRouter from "./dashboard";
+import searchRouter from "./search";
+import uploadRouter from "./upload";
+import adminAuthRouter from "./admin-auth";
+import authRouter from "./auth";
+import contactRouter from "./contact";
+import newsletterRouter from "./newsletter";
+import contentRouter from "./content";
+
+const router: IRouter = Router();
+
+router.use(healthRouter);
+router.use("/products", productsRouter);
+router.use("/collections", collectionsRouter);
+router.use("/categories", categoriesRouter);
+router.use("/cart", cartRouter);
+router.use("/orders", ordersRouter);
+router.use("/reviews", reviewsRouter);
+router.use("/journal", journalRouter);
+router.use("/lookbook", lookbookRouter);
+router.use("/customers", customersRouter);
+router.use("/dashboard", dashboardRouter);
+router.use("/search", searchRouter);
+router.use("/upload", uploadRouter);
+router.use("/admin", adminAuthRouter);
+router.use("/auth", authRouter);
+router.use("/contact", contactRouter);
+router.use("/newsletter", newsletterRouter);
+router.use("/content", contentRouter);
+
+export default router;

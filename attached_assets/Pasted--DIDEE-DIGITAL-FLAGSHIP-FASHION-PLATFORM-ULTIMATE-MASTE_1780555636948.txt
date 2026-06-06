@@ -1,0 +1,1052 @@
+# DIDEE – DIGITAL FLAGSHIP FASHION PLATFORM
+
+## ULTIMATE MASTER PROMPT FOR REPLIT AI
+
+# IMPORTANT INSTRUCTION
+
+Do not build a generic ecommerce website.
+
+Do not build a Shopify-style clone.
+
+Do not build a typical clothing store.
+
+Do not build a template-based fashion website.
+
+Instead, build a world-class digital flagship platform for DIDEE, a modern Nepalese fashion brand that aims to become one of the most recognized fashion labels in Nepal and eventually expand internationally.
+
+The final product should feel like a combination of:
+
+* Luxury Fashion Brand
+* Premium Ecommerce Platform
+* Fashion Editorial Magazine
+* Lifestyle Brand Experience
+* Community Platform
+* Content Management System
+* Enterprise Business Management Platform
+
+The website should feel comparable to brands such as:
+
+* Zara
+* COS
+* Aime Leon Dore
+* Fear of God
+* Represent
+* SSENSE
+* Moncler
+* Gucci
+* Ralph Lauren
+* Calvin Klein
+* Nike
+* Adidas
+
+while maintaining a strong, authentic Nepalese identity.
+
+---
+
+# BRAND IDENTITY
+
+## Brand Name
+
+DIDEE
+
+## Main Tagline
+
+BUILT IN NEPAL. MADE FOR EVERYONE.
+
+## Core Brand Statement
+
+DIDEE brings together streetwear, casual essentials, and dresses that celebrate individuality, comfort, confidence, self-expression, and modern style.
+
+Built in Nepal and created for everyone, DIDEE believes fashion should empower people to express themselves while feeling comfortable, stylish, and confident in everyday life.
+
+Every product should reflect:
+
+* Confidence
+* Comfort
+* Creativity
+* Modern Style
+* Individuality
+* Accessibility
+* Quality
+* Authenticity
+
+---
+
+# BRAND STORY
+
+Create a complete storytelling ecosystem.
+
+The website should explain that DIDEE was founded with the belief that fashion should not force people to choose between style and comfort.
+
+DIDEE exists to create clothing that feels good, looks good, and helps people confidently express their identity.
+
+The brand represents a new generation of Nepal:
+
+* Ambitious
+* Creative
+* Independent
+* Modern
+* Globally Inspired
+* Proudly Nepali
+
+DIDEE is more than clothing.
+
+It is a lifestyle brand focused on helping people feel confident in their everyday lives.
+
+---
+
+# DESIGN PHILOSOPHY
+
+The entire experience should feel:
+
+Luxury
+
+Premium
+
+Editorial
+
+Modern
+
+Minimal
+
+Fashion-Forward
+
+Sophisticated
+
+Immersive
+
+Elegant
+
+Trustworthy
+
+High-End
+
+Global
+
+The website should look like a design award-winning fashion platform.
+
+Every section must feel intentional.
+
+Every page must feel professionally art directed.
+
+---
+
+# VISUAL DESIGN SYSTEM
+
+## Color Palette
+
+Primary:
+#0A0A0A
+
+Secondary:
+#FFFFFF
+
+Luxury Accent:
+#C9A86A
+
+Neutral:
+#F5F3EF
+
+Fashion Grey:
+#ECECEC
+
+Success:
+#0F8B4C
+
+Error:
+#D7263D
+
+Avoid flashy gradients.
+
+Avoid excessive colors.
+
+Maintain luxury aesthetics.
+
+---
+
+# TYPOGRAPHY SYSTEM
+
+Headings:
+
+Playfair Display
+
+Cormorant Garamond
+
+Luxury Serif Typography
+
+Body:
+
+Inter
+
+Neue Haas Grotesk
+
+Modern Sans Serif
+
+Large typography.
+
+Editorial layouts.
+
+Magazine-style spacing.
+
+Generous whitespace.
+
+---
+
+# HOMEPAGE EXPERIENCE
+
+The homepage should feel like a luxury fashion campaign.
+
+Not a product catalog.
+
+Not a shopping page.
+
+A storytelling experience.
+
+---
+
+# HERO EXPERIENCE
+
+Full-screen cinematic hero.
+
+Video support.
+
+Image support.
+
+Campaign support.
+
+Luxury typography.
+
+Headline:
+
+DIDEE
+
+Built in Nepal.
+Made for Everyone.
+
+Supporting text:
+
+DIDEE brings together streetwear, casual essentials, and dresses that celebrate individuality, comfort, confidence, and modern style.
+
+Primary CTA:
+Shop Collection
+
+Secondary CTA:
+Discover Our Story
+
+Luxury scroll interactions.
+
+Smooth transitions.
+
+Parallax effects.
+
+Premium animation system.
+
+---
+
+# HOMEPAGE SECTIONS
+
+1. Cinematic Hero
+
+2. Brand Manifesto
+
+3. Fashion Campaign
+
+4. Featured Collections
+
+5. New Arrivals
+
+6. Best Sellers
+
+7. Men Collection
+
+8. Women Collection
+
+9. Streetwear Collection
+
+10. Casual Essentials
+
+11. Dresses Collection
+
+12. Limited Edition Collection
+
+13. The DIDEE Standard
+
+14. Why DIDEE
+
+15. Community Stories
+
+16. Customer Reviews
+
+17. Creator Collaborations
+
+18. Fashion Journal
+
+19. Lookbook
+
+20. Instagram Gallery
+
+21. Newsletter
+
+22. Store Information
+
+23. Footer
+
+---
+
+# COLLECTION MANAGEMENT
+
+Unlimited collections.
+
+Admin-created collections.
+
+Examples:
+
+Men
+
+Women
+
+Streetwear
+
+Casual Wear
+
+Formal Wear
+
+Dresses
+
+Accessories
+
+New Arrivals
+
+Best Sellers
+
+Trending
+
+Limited Edition
+
+Summer
+
+Winter
+
+Festival Collection
+
+Custom Collections
+
+Collection landing pages must be visually rich.
+
+---
+
+# PRODUCT MANAGEMENT
+
+Unlimited products.
+
+Unlimited categories.
+
+Unlimited variants.
+
+Unlimited attributes.
+
+Unlimited images.
+
+Unlimited videos.
+
+Unlimited inventory tracking.
+
+---
+
+# PRODUCT PAGE EXPERIENCE
+
+Create luxury product pages.
+
+Large product imagery.
+
+Editorial presentation.
+
+Zoom functionality.
+
+Fullscreen gallery.
+
+Video support.
+
+360° product view.
+
+Fabric details.
+
+Material information.
+
+Size guide.
+
+Fit guide.
+
+Shipping information.
+
+Care instructions.
+
+Reviews.
+
+Ratings.
+
+Related products.
+
+Complete the look.
+
+Frequently bought together.
+
+Recently viewed products.
+
+Wishlist.
+
+Share functionality.
+
+Sticky purchase bar.
+
+---
+
+# ADVANCED SEARCH
+
+Instant search.
+
+Predictive search.
+
+Autocomplete.
+
+Voice search ready.
+
+AI-powered search.
+
+Filter system.
+
+Sort system.
+
+Search analytics.
+
+---
+
+# CUSTOMER ACCOUNTS
+
+Email Login
+
+Google Login
+
+Facebook Login
+
+Apple Login
+
+Profile Management
+
+Wishlist
+
+Order History
+
+Saved Addresses
+
+Returns
+
+Loyalty Dashboard
+
+Referral Dashboard
+
+Notification Center
+
+---
+
+# SHOPPING EXPERIENCE
+
+Cart
+
+Wishlist
+
+Checkout
+
+Coupon System
+
+Discount System
+
+Gift Cards
+
+Referral Program
+
+Rewards Program
+
+Loyalty Points
+
+Abandoned Cart Recovery
+
+Cross-Selling
+
+Upselling
+
+Product Recommendations
+
+---
+
+# PAYMENT GATEWAYS
+
+Must support:
+
+eSewa
+
+Khalti
+
+Fonepay
+
+IME Pay
+
+Visa
+
+Mastercard
+
+Stripe
+
+PayPal
+
+Cash On Delivery
+
+Future payment integrations
+
+---
+
+# ORDER MANAGEMENT
+
+Order Creation
+
+Order Tracking
+
+Order Processing
+
+Refund Management
+
+Return Requests
+
+Exchange Requests
+
+Invoice Generation
+
+Shipping Labels
+
+Delivery Updates
+
+Email Notifications
+
+SMS Notifications
+
+---
+
+# INVENTORY MANAGEMENT
+
+Stock Tracking
+
+Warehouse Tracking
+
+Low Stock Alerts
+
+Out-of-Stock Alerts
+
+Inventory Reports
+
+Bulk Inventory Updates
+
+Inventory History
+
+Inventory Transfers
+
+---
+
+# ENTERPRISE ADMIN PANEL
+
+Build a complete enterprise-grade admin dashboard.
+
+Admin must control everything.
+
+No coding required.
+
+Everything configurable.
+
+Everything editable.
+
+Everything manageable.
+
+---
+
+# ADMIN CONTROLS
+
+Homepage Builder
+
+Drag-and-Drop Sections
+
+Hero Management
+
+Banner Management
+
+Collection Management
+
+Category Management
+
+Product Management
+
+Pricing Management
+
+Inventory Management
+
+Order Management
+
+Customer Management
+
+Blog Management
+
+Fashion Journal Management
+
+Lookbook Management
+
+Media Library
+
+Video Library
+
+Reviews Management
+
+Testimonials Management
+
+SEO Management
+
+Marketing Management
+
+Analytics Dashboard
+
+Email Templates
+
+Notification Templates
+
+Navigation Menus
+
+Footer Management
+
+Brand Settings
+
+Site Settings
+
+Language Settings
+
+User Roles
+
+Permissions
+
+Security Settings
+
+Integrations
+
+Backup Management
+
+---
+
+# MEDIA MANAGEMENT SYSTEM
+
+Centralized media library.
+
+Upload:
+
+Images
+
+Videos
+
+PDF Files
+
+Campaign Assets
+
+Fashion Photography
+
+Product Photos
+
+Lookbook Images
+
+Homepage Assets
+
+Automatic image optimization.
+
+Automatic WebP conversion.
+
+Automatic resizing.
+
+CDN support.
+
+---
+
+# CONTENT MANAGEMENT SYSTEM
+
+Create a full CMS.
+
+Pages:
+
+Home
+
+About
+
+Our Story
+
+Collections
+
+Products
+
+Lookbook
+
+Fashion Journal
+
+Contact
+
+Careers
+
+Shipping Policy
+
+Return Policy
+
+Privacy Policy
+
+Terms & Conditions
+
+FAQ
+
+Custom Pages
+
+Admin can create unlimited pages.
+
+---
+
+# BLOG & FASHION JOURNAL
+
+Editorial publishing platform.
+
+Rich text editor.
+
+Categories.
+
+Tags.
+
+Authors.
+
+SEO.
+
+Scheduling.
+
+Featured articles.
+
+Related articles.
+
+---
+
+# COMMUNITY PLATFORM
+
+Fashion Stories
+
+Customer Spotlights
+
+Creator Partnerships
+
+Campus Ambassadors
+
+Influencer Collaborations
+
+Events
+
+Challenges
+
+Community Content
+
+---
+
+# AI FEATURES
+
+AI Fashion Assistant
+
+AI Outfit Builder
+
+AI Product Recommendations
+
+AI Search Assistant
+
+AI Customer Support
+
+AI Size Recommendation
+
+AI Personalized Shopping Experience
+
+---
+
+# SEO SYSTEM
+
+Advanced SEO.
+
+Meta Titles
+
+Meta Descriptions
+
+Schema Markup
+
+Product Schema
+
+Review Schema
+
+Blog Schema
+
+Open Graph
+
+Twitter Cards
+
+Canonical URLs
+
+XML Sitemap
+
+Robots.txt
+
+SEO Analytics
+
+SEO Suggestions
+
+---
+
+# ANALYTICS
+
+Revenue Analytics
+
+Sales Analytics
+
+Inventory Analytics
+
+Customer Analytics
+
+Marketing Analytics
+
+Traffic Analytics
+
+Conversion Analytics
+
+Product Analytics
+
+Campaign Analytics
+
+Google Analytics 4
+
+Meta Pixel
+
+TikTok Pixel
+
+Google Tag Manager
+
+---
+
+# SECURITY
+
+Role-Based Access Control
+
+Super Admin
+
+Admin
+
+Manager
+
+Editor
+
+Inventory Staff
+
+Support Staff
+
+Marketing Staff
+
+Two-Factor Authentication
+
+Audit Logs
+
+Activity Logs
+
+Session Management
+
+Encrypted Data
+
+Security Monitoring
+
+---
+
+# DATABASE REQUIREMENTS
+
+Use MY OWN SUPABASE PROJECT.
+
+Do NOT create another backend provider.
+
+Use Supabase for:
+
+Authentication
+
+Database
+
+Storage
+
+Realtime Features
+
+Admin Data
+
+Customer Data
+
+Orders
+
+Products
+
+Media
+
+Analytics Data
+
+Use PostgreSQL schema design.
+
+Create scalable relational database architecture.
+
+Include migrations.
+
+Include Row Level Security.
+
+Include Supabase Policies.
+
+Include Supabase Edge Functions where necessary.
+
+---
+
+# TECH STACK
+
+Frontend:
+Next.js 15
+
+TypeScript
+
+Tailwind CSS
+
+Shadcn/UI
+
+Framer Motion
+
+GSAP
+
+Backend:
+Supabase
+
+Database:
+PostgreSQL
+
+State Management:
+Zustand
+
+Forms:
+React Hook Form
+
+Validation:
+Zod
+
+Image Optimization:
+Next.js Image
+
+Deployment Ready:
+Production Grade
+
+---
+
+# DEPLOYMENT REQUIREMENTS
+
+The project must be deployable without code changes to:
+
+Vercel
+
+Cloudflare Pages
+
+Hostinger VPS
+
+Hostinger Cloud Hosting
+
+AWS
+
+DigitalOcean
+
+Render
+
+Railway
+
+Netlify
+
+Self-Hosted VPS
+
+Docker
+
+Ubuntu Server
+
+Nginx
+
+PM2
+
+Provide:
+
+Environment Variables Documentation
+
+Deployment Documentation
+
+Docker Configuration
+
+Production Build Configuration
+
+Production Security Configuration
+
+Database Migration Scripts
+
+Backup Strategy
+
+Restore Strategy
+
+---
+
+# PERFORMANCE REQUIREMENTS
+
+Lighthouse Score 95+
+
+SEO 95+
+
+Accessibility 95+
+
+Performance 95+
+
+Best Practices 95+
+
+Fully Responsive
+
+Mobile First
+
+Tablet Optimized
+
+Desktop Optimized
+
+4K Ready
+
+Fast Loading
+
+Lazy Loading
+
+Image Optimization
+
+Code Splitting
+
+Caching
+
+CDN Ready
+
+PWA Ready
+
+---
+
+# FINAL OBJECTIVE
+
+Build the digital flagship platform of DIDEE.
+
+Not just an ecommerce store.
+
+Not just a clothing website.
+
+Create a premium fashion ecosystem capable of supporting the growth of DIDEE into one of Nepal's leading fashion brands.
+
+Every page, every animation, every image, every interaction, every product, every collection, every story, and every customer experience must reinforce the message:
+
+"BUILT IN NEPAL. MADE FOR EVERYONE."
+
+DIDEE brings together streetwear, casual essentials, and dresses that celebrate individuality, comfort, confidence, self-expression, and modern style.
+
+The final result should feel like a luxury international fashion brand while proudly representing the ambition, creativity, and future of Nepal.

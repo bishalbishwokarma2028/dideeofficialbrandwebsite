@@ -1,0 +1,62 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "7XpJ3HgjmjP6PA1O3Hrog"
+uri = "file://artifacts/didee/public/images/hero-bg.png"
+type = "image"
+title = "Fashion lookbook hero background"
+
+[[generated]]
+id = "LICIKC7GNMHAP88pR_AMz"
+uri = "file://artifacts/didee/public/images/collection-men.png"
+type = "image"
+title = "Mens collection banner"
+
+[[generated]]
+id = "7d5K9-UhjMtO_or1lAf-W"
+uri = "file://artifacts/didee/public/images/collection-women.png"
+type = "image"
+title = "Womens collection banner"
+
+[[generated]]
+id = "nxsrD69fM-JOyRTYhcHeB"
+uri = "file://artifacts/didee/public/images/collection-casual.png"
+type = "image"
+title = "Casual collection banner"
+
+[[generated]]
+id = "T3OItTpQBWwiypigXucgn"
+uri = "file://artifacts/didee/public/images/collection-dresses.png"
+type = "image"
+title = "Dresses collection banner"
+
+[[generated]]
+id = "VIrzHyrGQXR2afNh20xFY"
+uri = "file://artifacts/didee/public/images/product-2.png"
+type = "image"
+title = "Product shot white tee"
+
+[[generated]]
+id = "wwKhL8tCyA3sQ6LASuVuW"
+uri = "file://artifacts/didee/public/images/collection-streetwear.png"
+type = "image"
+title = "Streetwear collection banner"
+
+[[generated]]
+id = "1AYyNKhL6817700dImqsV"
+uri = "file://artifacts/didee/public/images/product-3.png"
+type = "image"
+title = "Product shot beige trousers"
+
+[[generated]]
+id = "8LJAHCzngmhmShwc7WF3L"
+uri = "file://artifacts/didee/public/images/product-4.png"
+type = "image"
+title = "Product shot black dress"
+
+[[generated]]
+id = "cG9Z-_JOgbQ7Ua3Av-UU-"
+uri = "file://artifacts/didee/public/images/product-1.png"
+type = "image"
+title = "Product shot black hoodie"

@@ -1,0 +1,85 @@
+Improve the "Your Cart" feature , for shopping or ordering , the user has to fill the most required question so that admin can easily know . For ordering or shopping cart , the user must first login or create an account . Then all shopping cart or order must be visible in their dashboard . They can also edit it delete it , once the order is complete by filling all the questions , it can't be deleted . After user submit their order , it must be added in the admin panel , make sure admin can view all the details . Inside Admin panel , there is Site Content , where there must be each and everything which is in website . Make sure admin can delete , edit , add , or change anything including photos . After admin choose theme , it must be applied to that theme in the best attractive format in the website . Not only fonts should be changed , whole website theme must be changed after admin changed theme . Inside Admin Panle , the LookBook is not opening . Please fix this . After openng each section , it should first be animated . The logo should be first animated in spinning style or 3D style then only the section should be opened . Improve this overall feature .   
+
+Inside Admin Panel Theme , add " Black and White " theme which contains all the website background should be in white and others in respective place . SEO & GOOGLE BRAND SEARCH OPTIMIZATION
+
+Configure the DIDEE website so that Google can properly identify and display the brand when users search:
+
+DIDEE
+DIDEE Official
+DIDEE Nepal
+DIDEE Clothing
+DIDEE Fashion
+Implement the following:
+
+Website Title
+DIDEE Official | Built in Nepal, Made for Everyone
+
+Meta Description
+DIDEE is a modern Nepalese fashion brand bringing together streetwear, casual essentials, and contemporary fashion that celebrates individuality, comfort, confidence, and modern style. Built in Nepal. Made for Everyone.
+
+Brand Metadata
+Brand Name: DIDEE
+Industry: Fashion & Clothing
+Country: Nepal
+Tagline: Built in Nepal. Made for Everyone
+
+Favicon & Brand Logo
+Configure the DIDEE logo as:
+
+Website favicon
+Browser tab icon
+Search result brand icon
+Apple touch icon
+Structured Data (JSON-LD)
+Implement:
+Organization Schema
+Website Schema
+Organization Name: DIDEE
+
+Description:
+Modern Nepalese Fashion Brand
+
+Generate:
+robots.txt
+sitemap.xml
+canonical URLs . 7. Next.js Metadata
+Configure proper metadata for all pages.
+Homepage Metadata:
+
+Title:
+DIDEE Official | Built in Nepal, Made for Everyone
+
+Description:
+DIDEE brings together streetwear, casual essentials, and dresses that celebrate individuality, comfort, and modern style.
+
+Open Graph Setup
+og:title:
+DIDEE Official
+
+og:description:
+Built in Nepal. Made for Everyone.
+
+og:image:
+DIDEE Logo
+
+SEO Requirements
+Google Search Console ready
+Fast indexing ready
+SEO optimized
+Mobile friendly
+Lighthouse SEO score above 95
+Expected Result
+After deployment and indexing, when users search:
+
+DIDEE
+DIDEE Official
+DIDEE Nepal
+DIDEE Clothing
+DIDEE Fashion
+Google should recognize DIDEE as a fashion brand and display:
+
+DIDEE logo
+Website title
+Meta description
+Official website link
+Use SEO best practices to maximize brand visibility in Google search results. Make this website completely mobile phone reponsive . Make sure while opening from the mobile phone , it mustn't overlap other sections and the user must feel attractive and satisfaction . I want to add my own supabase for this website . Connect my supabase .

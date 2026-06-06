@@ -1,0 +1,62 @@
+My website project is approximately 1.2 GB when exported as a ZIP file, which is unusually large for a website project.
+
+I want you to perform a complete storage and file analysis of the entire project and identify exactly what is consuming the most disk space.
+
+Your objectives:
+
+1. Analyze the entire project structure.
+2. Find the largest files and folders.
+3. Show a detailed breakdown of storage usage.
+4. Identify all unnecessary, temporary, cached, generated, duplicate, backup, log, and unused files.
+5. Identify unused dependencies and packages.
+6. Identify unused images, videos, fonts, CSS, JavaScript, and components.
+7. Identify build artifacts and cache directories that are safe to remove.
+8. Search the entire codebase and verify whether each file is actually being used.
+
+IMPORTANT SAFETY RULES:
+
+- Do NOT delete source code files that are required by the application.
+- Do NOT delete active assets being used by the website.
+- Do NOT delete database files, schemas, configurations, environment files, or production files.
+- Verify references before deleting anything.
+- If a file is referenced anywhere in the project, do not remove it unless you are absolutely certain it is unnecessary.
+
+Before deleting anything:
+
+- Generate a report showing:
+  • File/folder path
+  • Size
+  • Purpose
+  • Why it exists
+  • Whether it is safe to remove
+  • Estimated space savings
+
+After analysis:
+
+- Safely delete all verified unnecessary files.
+- Remove caches.
+- Remove temporary files.
+- Remove duplicate files.
+- Remove build artifacts that can be regenerated.
+- Remove unused dependencies.
+- Remove abandoned code and assets only if they are confirmed unused.
+
+After cleanup:
+
+1. Reinstall dependencies if needed.
+2. Run the application.
+3. Test all pages, routes, APIs, forms, assets, and functionality.
+4. Verify that the website works exactly the same as before.
+
+Finally provide:
+
+- Original project size
+- Final project size
+- Total space saved
+- Complete list of deleted files
+- Remaining largest folders
+- Additional optimization recommendations
+
+The website must remain 100% functional after cleanup. If there is any uncertainty about a file, keep it rather than deleting it.
+
+Start by finding the top 100 largest files and folders in the project and explain why my exported ZIP has reached approximately 1.2 GB.

@@ -1,0 +1,133 @@
+import { Router } from "express";
+import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const CONTENT_FILE = path.join(__dirname, "..", "..", "site-content.json");
+
+const DEFAULT_CONTENT: Record<string, Record<string, unknown>> = {
+  home: {
+    heroSlides: [
+      { title: "FRESH DROP", subtitle: "FIVE LOOKS. ONE STATEMENT. BUILT IN NEPAL.", cta1: "SHOP COLLECTION", cta2: "VIEW LOOKBOOK", image: "/images/hero-1.jpg" },
+    ],
+    featuredTitle: "THE COLLECTIONS",
+    featuredSubtitle: "Each piece is a distinct expression of Nepalese street culture.",
+    newArrivalsTitle: "NEW ARRIVALS",
+    newArrivalsSubtitle: "Fresh from the studio to your wardrobe.",
+    standardTitle: "THE DIDEE STANDARD",
+    standardSubtitle: "Six principles that define every thread, every seam, and every decision at DIDEE.",
+  },
+  shop: {
+    title: "THE SHOP",
+    subtitle: "Discover every drop, every piece, every story.",
+    heroImage: "",
+  },
+  collections: {
+    title: "The DIDEE World",
+    subtitle: "Each DIDEE collection is a distinct expression of Nepalese street culture — fearless drops that blend global aesthetics with Kathmandu's raw, unapologetic energy.",
+    heroImage: "/images/collections-hero.jpg",
+  },
+  lookbook: {
+    title: "LOOKBOOK",
+    subtitle: "Each season, DIDEE curates a visual story that goes beyond fashion. Our lookbook is a window into the streets of Kathmandu — raw, unapologetic, and deeply human.",
+    images: [],
+  },
+  journal: {
+    title: "THE JOURNAL",
+    subtitle: "Stories from the streets of Kathmandu. Culture, craft, and the people behind every stitch.",
+    heroImage: "",
+  },
+  about: {
+    title: "About DIDEE",
+    intro: "DIDEE is a Nepalese fashion brand built on the belief that world-class design shouldn't require a world-class price tag.",
+    body: "We are built in Nepal, made for everyone. Every piece we create carries the spirit of Kathmandu — its raw energy, its fearless youth, and its unapologetic creativity.",
+    images: [],
+    stats: [
+      { label: "Founded", value: "2025" },
+      { label: "Based in", value: "Kathmandu" },
+      { label: "Made in", value: "Nepal" },
+    ],
+  },
+  "our-story": {
+    title: "Our Story",
+    chapters: [
+      { heading: "The Beginning", body: "DIDEE was born from the streets of Kathmandu, inspired by the fearless youth culture that pulses through the city." },
+      { heading: "The Vision", body: "We believe fashion should be accessible, bold, and deeply rooted in identity. Not just aesthetics — but a statement." },
+      { heading: "The Future", body: "DIDEE is growing. New collections, new collaborations, new ways to express the Nepalese spirit to the world." },
+    ],
+    heroImage: "",
+  },
+  "who-we-are": {
+    title: "Who We Are",
+    intro: "DIDEE is a Nepalese fashion brand built on the belief that world-class design shouldn't require a world-class price tag — and that the most powerful style comes from the streets, not the runway.",
+    founderName: "Niraj Onta",
+    founderTitle: "Founder & Creative Director",
+    founderBio: "Raised in the streets of Kathmandu, Niraj founded DIDEE with one mission: to give Nepalese youth a fashion brand they could truly call their own.",
+    founderImage: "",
+    teamImages: [],
+  },
+  "our-services": {
+    title: "Our Services",
+    subtitle: "From design to delivery, DIDEE offers a complete fashion ecosystem.",
+    services: [
+      { title: "Custom Orders", description: "Work directly with our team to create a piece that's uniquely yours." },
+      { title: "Bulk & Wholesale", description: "Partner with us for bulk orders, retail partnerships, and collaborative drops." },
+      { title: "Styling Consultation", description: "Book a session with a DIDEE stylist to curate your perfect look." },
+      { title: "Brand Collaboration", description: "Let's build something together. We're open to creative partnerships." },
+    ],
+  },
+  contact: {
+    title: "Contact Us",
+    subtitle: "We'd love to hear from you. Reach out for orders, collabs, or just to say hello.",
+    address: "Kathmandu, Nepal",
+    email: "hello@didee.com.np",
+    phone: "+977 98XXXXXXXX",
+    instagram: "@didee.np",
+    facebook: "DIDEE Nepal",
+    tiktok: "@didee.np",
+    mapEmbed: "",
+  },
+};
+
+function readContent(): Record<string, Record<string, unknown>> {
+  try {
+    if (fs.existsSync(CONTENT_FILE)) {
+      return JSON.parse(fs.readFileSync(CONTENT_FILE, "utf-8"));
+    }
+  } catch {
+    // fall through to defaults
+  }
+  return DEFAULT_CONTENT;
+}
+
+function writeContent(data: Record<string, Record<string, unknown>>) {
+  fs.writeFileSync(CONTENT_FILE, JSON.stringify(data, null, 2), "utf-8");
+}
+
+const router = Router();
+
+function requireAdmin(req: any, res: any, next: any) {
+  if (req.session?.adminAuthenticated) return next();
+  res.status(401).json({ error: "Unauthorized" });
+}
+
+router.get("/", (_req, res) => {
+  res.json(readContent());
+});
+
+router.get("/:section", (req, res) => {
+  const content = readContent();
+  const section = content[req.params.section];
+  if (!section) return res.json(DEFAULT_CONTENT[req.params.section] ?? {});
+  res.json(section);
+});
+
+router.put("/:section", requireAdmin, (req, res) => {
+  const content = readContent();
+  content[req.params.section] = { ...(content[req.params.section] ?? {}), ...req.body };
+  writeContent(content);
+  res.json({ ok: true, section: req.params.section, data: content[req.params.section] });
+});
+
+export default router;

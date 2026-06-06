@@ -1,0 +1,162 @@
+1. Convert Dark Theme Sections to Light Theme
+
+In the Home Section, there is a "Why DIDEE" section that is currently using a dark/black theme. Please change it to a clean, modern light (white) theme so that the text becomes easier to read and users can clearly understand the content.
+
+Similarly, the "Our Philosophy" section is also using a dark theme. Please convert it to a light theme as well and improve readability, spacing, typography, and overall visual appeal.
+
+2. Fix "100% Made in Nepal" Display
+
+There is a "100% Made in Nepal" section somewhere in the middle of the Home page.
+
+Currently, the digit "1" in "100%" looks similar to the letter "I" because of the selected font.
+
+Please:
+
+Use a clearer font.
+Ensure the number "1" is displayed properly as a numeric digit.
+Improve readability and typography.
+Convert this section to match the new light theme.
+3. Improve Product Category Navigation
+
+At the bottom of the Home page there are categories such as:
+
+New Arrivals
+Dresses
+Casual Essentials
+Streetwear
+
+When users click these categories, the page appears to show a loading state or blank content instead of functioning properly.
+
+Please:
+
+Fix all category navigation.
+Ensure every category is fully functional.
+Load products correctly.
+Remove blank screens or endless loading states.
+Improve the overall user experience and performance.
+4. Improve Contact Us Page Content
+
+Inside the Contact Us section there are currently:
+
+Order Support
+Returns & Exchanges
+
+Please remove both of these sections.
+
+Instead, replace them with more meaningful company-related content, such as:
+
+About DIDEE
+Brand Vision
+Customer Commitment
+Quality Standards
+Company Mission
+Why Choose DIDEE
+
+The replacement content should be professional, relevant, and visually engaging.
+
+5. Improve Hero Banners of "Who We Are" and "Our Services"
+
+At the top of both:
+
+Who We Are
+Our Services
+
+there is currently a dark banner/image section.
+
+Issues:
+
+The image is not clearly visible.
+The dark overlay is too strong.
+The visuals feel dull and unclear.
+
+Please:
+
+Replace the current dark styling with a cleaner, brighter design.
+Use either a light theme or a well-balanced premium theme.
+Ensure images are clearly visible.
+Improve text contrast and readability.
+Replace the existing image with the image that will be provided separately.
+
+The provided image should be used as the hero/banner image for both sections.
+
+6. Improve Lookbook Header Section
+
+At the top of the Lookbook page/section, there is currently little or no explanatory content.
+
+Please add a professionally written introduction that explains:
+
+The purpose of the Lookbook.
+DIDEE's design philosophy.
+The inspiration behind the collections.
+How users can explore styles and outfits.
+
+The content should be:
+
+Brand-focused.
+Informative.
+Visually attractive.
+Professionally written.
+Helpful for first-time visitors.
+7. Replace "48 Pieces" Text in Lookbook
+
+Within the Lookbook section there is currently a label showing:
+
+"48 Pieces"
+
+Please remove this text and replace it with something more meaningful and premium, such as:
+
+Curated Collection
+Signature Styles
+Handpicked Designs
+Exclusive Selection
+Seasonal Collection
+
+Choose wording that aligns with the DIDEE brand identity and provides a better user experience.
+
+8. Wishlist Authentication Requirement
+
+Currently, users can access the Wishlist directly.
+
+Please implement proper authentication logic:
+
+Users must first sign in or create an account before using Wishlist features.
+If an unauthenticated user clicks Wishlist:
+Show a login/signup prompt.
+Redirect them to the authentication page.
+Only authenticated users should be able to save items to their Wishlist.
+9. Expand Content Across the Website
+
+Several sections throughout the website contain very little content and feel incomplete.
+
+Please:
+
+Identify all sections with insufficient content.
+Expand them with meaningful DIDEE-related content.
+Add professional descriptions and storytelling.
+Strengthen the brand identity.
+Improve engagement and trust.
+
+Content should focus on:
+
+Brand Story
+Company Vision
+Quality Commitment
+Craftsmanship
+Customer Experience
+Nepalese Identity
+Fashion Philosophy
+10. Improve Navigation Experience
+
+Review and improve the entire navigation system of the website.
+
+Requirements:
+
+Smooth navigation.
+Proper section linking.
+Mobile responsiveness.
+Consistent scrolling behavior.
+Better user experience.
+Faster interactions.
+Professional and modern navigation design.
+
+All menus, buttons, and internal links should function reliably and provide a seamless browsing experience.

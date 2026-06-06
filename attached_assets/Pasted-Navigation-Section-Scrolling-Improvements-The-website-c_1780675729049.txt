@@ -1,0 +1,109 @@
+Navigation & Section Scrolling Improvements
+
+The website currently has several buttons and links that navigate to other sections, but when clicked, they scroll to the bottom or middle of the target section. This creates a poor user experience because users must manually scroll up to see the section properly.
+
+Please update the navigation behavior so that whenever a user clicks any button or link that redirects to another section, the target section always opens from the top of that section, ensuring the content is immediately visible from the beginning.
+
+The following links/buttons should be updated:
+
+1. Who We Are Section
+The "Shop the Collection" button currently navigates to the collection section but displays the lower portion of the section.
+It should instead open the collection section from the very top.
+2. Services Section
+The "Shop Now" button should navigate to the collection/shop section and display it from the top.
+3. Our Story Section
+"Shop Collection" should open the collection section from the top.
+"Who We Are" should open the Who We Are section from the top.
+4. About Section
+"Shop Now" should open the collection section from the top.
+"Our Story" should open the Our Story section from the top.
+5. Lookbook Section
+The "Shop All Pieces" button should navigate to the collection section and display it from the top.
+6. Home Section
+The "Contact Us" button should navigate directly to the Contact section and display it from the top.
+7. Other Home Section Buttons
+
+The following buttons should all navigate correctly and display the destination section from the top:
+
+Shop Collection
+View Lookbook
+Explore Now
+Our Story
+Collection
+Discover Looks
+Browse All Products
+
+All section navigation throughout the website should use smooth scrolling and always position the user at the top of the selected section.
+
+Philosophy Section Enhancement
+
+The "Our Philosophy" section currently contains very little content and feels incomplete.
+
+Please:
+
+Expand the content significantly with meaningful and brand-focused messaging.
+Use better typography and premium font selections.
+Improve spacing, layout, and visual hierarchy.
+Add subtle modern animations where appropriate.
+Make the section feel luxurious, engaging, and visually attractive.
+Ensure users immediately understand the brand's values and philosophy.
+Remove "7-Day Easy Return"
+
+Inside the Philosophy section, there is currently a "7-Day Easy Return" element.
+
+Please remove this completely.
+
+Replace Free Delivery & Easy Returns Area
+
+Further down the Home page, there is a section containing items such as:
+
+Free Delivery
+Easy Returns
+
+Please remove these generic items and replace them with more meaningful brand-related content.
+
+Suggestions:
+
+Craftsmanship & Quality
+Premium Materials
+Sustainable Production
+Exclusive Collections
+Timeless Design
+Customer Commitment
+Brand Heritage
+
+The replacement content should:
+
+Be visually attractive.
+Include proper icons, illustrations, or animations.
+Provide detailed explanations instead of short generic text.
+Strengthen the brand identity.
+Contact Us Section Improvement
+
+The current Contact Us experience needs enhancement.
+
+Please create a more professional and visually appealing Contact experience using either:
+
+Option A: Dedicated Contact Section
+
+Create a fully designed Contact Us section that includes:
+
+Company information
+Contact form
+Email address
+Phone number
+Business hours
+Social media links
+Google Maps integration (if available)
+Option B: Dedicated Contact Page
+
+When users click "Contact Us", open a dedicated Contact page with:
+
+Professional layout
+Company details
+Inquiry form
+Multiple contact methods
+Clear call-to-action
+Modern UI/UX design
+
+The Contact experience should feel professional, trustworthy, visually attractive, and make it easy for users to communicate with the company.
