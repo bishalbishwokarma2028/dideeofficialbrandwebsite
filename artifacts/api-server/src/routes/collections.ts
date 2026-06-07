@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { db } from "@workspace/db";
 import { collectionsTable, productsTable } from "@workspace/db";
-import { eq, desc, asc, sql } from "drizzle-orm";
+import { eq, asc, sql } from "drizzle-orm";
 import { CreateCollectionBody, UpdateCollectionBody } from "@workspace/api-zod";
+import { dbError } from "../lib/db-error.js";
 
 const router = Router();
 
@@ -21,7 +22,7 @@ router.get("/", async (req, res) => {
     const collections = await db.select().from(collectionsTable).orderBy(asc(collectionsTable.sortOrder), asc(collectionsTable.name));
     res.json(await Promise.all(collections.map(enrichCollection)));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -31,7 +32,7 @@ router.get("/featured", async (req, res) => {
     const collections = await db.select().from(collectionsTable).where(eq(collectionsTable.featured, true)).orderBy(asc(collectionsTable.sortOrder)).limit(6);
     res.json(await Promise.all(collections.map(enrichCollection)));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -52,7 +53,7 @@ router.post("/", async (req, res) => {
     }).returning();
     res.status(201).json(await enrichCollection(collection));
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: dbError(e) });
   }
 });
 
@@ -63,7 +64,7 @@ router.get("/:slug", async (req, res) => {
     if (!collection) return res.status(404).json({ error: "Not found" });
     res.json(await enrichCollection(collection));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -75,7 +76,7 @@ router.patch("/:slug", async (req, res) => {
     if (!updated) return res.status(404).json({ error: "Not found" });
     res.json(await enrichCollection(updated));
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: dbError(e) });
   }
 });
 
@@ -85,7 +86,7 @@ router.delete("/:slug", async (req, res) => {
     await db.delete(collectionsTable).where(eq(collectionsTable.slug, req.params.slug));
     res.status(204).send();
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 

@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { db } from "@workspace/db";
 import { categoriesTable } from "@workspace/db";
-import { asc } from "drizzle-orm";
+import { eq, asc } from "drizzle-orm";
 import { CreateCategoryBody } from "@workspace/api-zod";
+import { dbError } from "../lib/db-error.js";
 
 const router = Router();
 
@@ -16,18 +17,7 @@ router.get("/", async (req, res) => {
     const categories = await db.select().from(categoriesTable).orderBy(asc(categoriesTable.name));
     res.json(categories);
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-// DELETE /api/categories/:slug
-router.delete("/:slug", async (req, res) => {
-  try {
-    const { eq } = await import("drizzle-orm");
-    await db.delete(categoriesTable).where(eq(categoriesTable.slug, req.params.slug));
-    res.json({ success: true });
-  } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -43,7 +33,17 @@ router.post("/", async (req, res) => {
     }).returning();
     res.status(201).json(category);
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: dbError(e) });
+  }
+});
+
+// DELETE /api/categories/:slug
+router.delete("/:slug", async (req, res) => {
+  try {
+    await db.delete(categoriesTable).where(eq(categoriesTable.slug, req.params.slug));
+    res.json({ success: true });
+  } catch (e: any) {
+    res.status(500).json({ error: dbError(e) });
   }
 });
 

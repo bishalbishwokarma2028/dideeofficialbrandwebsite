@@ -5,6 +5,7 @@ export async function runMigrations() {
   try {
     console.log("[migrate] Running database migrations...");
 
+    // Create tables in dependency order
     await client.query(`
       CREATE TABLE IF NOT EXISTS collections (
         id SERIAL PRIMARY KEY,
@@ -37,8 +38,8 @@ export async function runMigrations() {
         compare_price NUMERIC(10,2),
         images JSONB NOT NULL DEFAULT '[]',
         tags JSONB NOT NULL DEFAULT '[]',
-        collection_slug TEXT REFERENCES collections(slug) ON DELETE SET NULL,
-        category_slug TEXT REFERENCES categories(slug) ON DELETE SET NULL,
+        collection_slug TEXT,
+        category_slug TEXT,
         status TEXT NOT NULL DEFAULT 'active',
         featured BOOLEAN NOT NULL DEFAULT false,
         is_new BOOLEAN NOT NULL DEFAULT false,
@@ -49,12 +50,12 @@ export async function runMigrations() {
 
       CREATE TABLE IF NOT EXISTS product_variants (
         id SERIAL PRIMARY KEY,
-        product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+        product_id INTEGER NOT NULL,
         size TEXT,
         color TEXT,
-        sku TEXT NOT NULL UNIQUE,
+        sku TEXT NOT NULL,
         stock INTEGER NOT NULL DEFAULT 0,
-        price NUMERIC(10,2) NOT NULL,
+        price NUMERIC(10,2) NOT NULL DEFAULT 0,
         created_at TIMESTAMP NOT NULL DEFAULT now()
       );
 
@@ -81,8 +82,8 @@ export async function runMigrations() {
 
       CREATE TABLE IF NOT EXISTS orders (
         id SERIAL PRIMARY KEY,
-        user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
-        customer_id INTEGER REFERENCES customers(id) ON DELETE SET NULL,
+        user_id INTEGER,
+        customer_id INTEGER,
         customer_name TEXT NOT NULL,
         customer_email TEXT NOT NULL,
         customer_phone TEXT,
@@ -104,7 +105,7 @@ export async function runMigrations() {
 
       CREATE TABLE IF NOT EXISTS order_items (
         id SERIAL PRIMARY KEY,
-        order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+        order_id INTEGER NOT NULL,
         product_id INTEGER NOT NULL,
         variant_id INTEGER,
         product_name TEXT NOT NULL,
@@ -191,18 +192,34 @@ export async function runMigrations() {
       );
     `);
 
-    // Add missing columns to existing tables (safe to run even if columns exist)
-    const alterStatements = [
+    // Patch existing tables that may have been created with wrong schema
+    const patches: string[] = [
       `ALTER TABLE products ADD COLUMN IF NOT EXISTS tags JSONB NOT NULL DEFAULT '[]'`,
+      `ALTER TABLE products ADD COLUMN IF NOT EXISTS short_description TEXT`,
+      `ALTER TABLE products ADD COLUMN IF NOT EXISTS compare_price NUMERIC(10,2)`,
+      `ALTER TABLE products ADD COLUMN IF NOT EXISTS is_new BOOLEAN NOT NULL DEFAULT false`,
+      `ALTER TABLE products ADD COLUMN IF NOT EXISTS is_best_seller BOOLEAN NOT NULL DEFAULT false`,
+      `ALTER TABLE products ADD COLUMN IF NOT EXISTS collection_slug TEXT`,
+      `ALTER TABLE products ADD COLUMN IF NOT EXISTS category_slug TEXT`,
+      `ALTER TABLE products ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT now()`,
       `ALTER TABLE collections ADD COLUMN IF NOT EXISTS banner_image TEXT`,
+      `ALTER TABLE collections ADD COLUMN IF NOT EXISTS season TEXT`,
+      `ALTER TABLE collections ADD COLUMN IF NOT EXISTS sort_order INTEGER NOT NULL DEFAULT 0`,
       `ALTER TABLE product_variants ADD COLUMN IF NOT EXISTS price NUMERIC(10,2) NOT NULL DEFAULT 0`,
+      `ALTER TABLE product_variants ADD COLUMN IF NOT EXISTS sku TEXT NOT NULL DEFAULT ''`,
+      `ALTER TABLE orders ADD COLUMN IF NOT EXISTS discount NUMERIC(10,2) NOT NULL DEFAULT 0`,
+      `ALTER TABLE orders ADD COLUMN IF NOT EXISTS payment_method TEXT`,
+      `ALTER TABLE orders ADD COLUMN IF NOT EXISTS district TEXT`,
+      `ALTER TABLE orders ADD COLUMN IF NOT EXISTS landmark TEXT`,
+      `ALTER TABLE users ADD COLUMN IF NOT EXISTS email_verified BOOLEAN NOT NULL DEFAULT false`,
+      `ALTER TABLE users ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP NOT NULL DEFAULT now()`,
     ];
 
-    for (const sql of alterStatements) {
+    for (const sql of patches) {
       try {
         await client.query(sql);
       } catch {
-        // Column may already exist with correct type — safe to ignore
+        // Safe to ignore — column may already exist or type conflict
       }
     }
 

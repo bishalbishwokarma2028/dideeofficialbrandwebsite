@@ -3,6 +3,7 @@ import { db } from "@workspace/db";
 import { journalPostsTable } from "@workspace/db";
 import { eq, and, desc } from "drizzle-orm";
 import { CreateJournalPostBody } from "@workspace/api-zod";
+import { dbError } from "../lib/db-error.js";
 
 const router = Router();
 
@@ -35,7 +36,17 @@ router.get("/", async (req, res) => {
     const posts = await query;
     res.json(posts.map(serializePost));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
+  }
+});
+
+// GET /api/journal/all — admin: all posts including unpublished
+router.get("/all", async (req, res) => {
+  try {
+    const posts = await db.select().from(journalPostsTable).orderBy(desc(journalPostsTable.createdAt));
+    res.json(posts.map(serializePost));
+  } catch (e: any) {
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -60,7 +71,7 @@ router.post("/", async (req, res) => {
     }).returning();
     res.status(201).json(serializePost(post));
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: dbError(e) });
   }
 });
 
@@ -71,7 +82,30 @@ router.get("/:slug", async (req, res) => {
     if (!post) return res.status(404).json({ error: "Not found" });
     res.json(serializePost(post));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
+  }
+});
+
+// PATCH /api/journal/:slug
+router.patch("/:slug", async (req, res) => {
+  try {
+    const updates: any = { ...req.body };
+    if (updates.published && !updates.publishedAt) updates.publishedAt = new Date();
+    const [updated] = await db.update(journalPostsTable).set(updates).where(eq(journalPostsTable.slug, req.params.slug)).returning();
+    if (!updated) return res.status(404).json({ error: "Not found" });
+    res.json(serializePost(updated));
+  } catch (e: any) {
+    res.status(400).json({ error: dbError(e) });
+  }
+});
+
+// DELETE /api/journal/:slug
+router.delete("/:slug", async (req, res) => {
+  try {
+    await db.delete(journalPostsTable).where(eq(journalPostsTable.slug, req.params.slug));
+    res.status(204).send();
+  } catch (e: any) {
+    res.status(500).json({ error: dbError(e) });
   }
 });
 

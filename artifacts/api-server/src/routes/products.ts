@@ -14,6 +14,7 @@ import {
   UpdateProductBody,
   CreateProductVariantBody,
 } from "@workspace/api-zod";
+import { dbError } from "../lib/db-error.js";
 
 const router = Router();
 
@@ -68,7 +69,7 @@ router.get("/", async (req, res) => {
     const products = await Promise.all(paged.map(enrichProduct));
     res.json({ products, total });
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -95,7 +96,7 @@ router.post("/", async (req, res) => {
     }).returning();
     res.status(201).json(await enrichProduct(product));
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: dbError(e) });
   }
 });
 
@@ -105,7 +106,7 @@ router.get("/featured", async (req, res) => {
     const products = await db.select().from(productsTable).where(and(eq(productsTable.featured, true), eq(productsTable.status, "active"))).orderBy(desc(productsTable.createdAt)).limit(8);
     res.json(await Promise.all(products.map(enrichProduct)));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -116,7 +117,7 @@ router.get("/new-arrivals", async (req, res) => {
     const products = await db.select().from(productsTable).where(and(eq(productsTable.isNew, true), eq(productsTable.status, "active"))).orderBy(desc(productsTable.createdAt)).limit(limit);
     res.json(await Promise.all(products.map(enrichProduct)));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -127,7 +128,7 @@ router.get("/best-sellers", async (req, res) => {
     const products = await db.select().from(productsTable).where(and(eq(productsTable.isBestSeller, true), eq(productsTable.status, "active"))).orderBy(desc(productsTable.createdAt)).limit(limit);
     res.json(await Promise.all(products.map(enrichProduct)));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -160,7 +161,7 @@ router.get("/:slug", async (req, res) => {
       collection,
     });
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -175,7 +176,7 @@ router.patch("/:slug", async (req, res) => {
     if (!updated) return res.status(404).json({ error: "Not found" });
     res.json(await enrichProduct(updated));
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: dbError(e) });
   }
 });
 
@@ -185,7 +186,7 @@ router.delete("/:slug", async (req, res) => {
     await db.delete(productsTable).where(eq(productsTable.slug, req.params.slug));
     res.status(204).send();
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -197,7 +198,7 @@ router.get("/:slug/variants", async (req, res) => {
     const variants = await db.select().from(productVariantsTable).where(eq(productVariantsTable.productId, product.id));
     res.json(variants.map(v => ({ ...v, price: parseFloat(v.price) })));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -217,7 +218,7 @@ router.post("/:slug/variants", async (req, res) => {
     }).returning();
     res.status(201).json({ ...variant, price: parseFloat(variant.price) });
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: dbError(e) });
   }
 });
 
@@ -235,7 +236,7 @@ router.get("/:slug/related", async (req, res) => {
     ).limit(4);
     res.json(await Promise.all(related.map(enrichProduct)));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 

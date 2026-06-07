@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { db } from "@workspace/db";
 import { ordersTable, orderItemsTable, productsTable, productVariantsTable, customersTable } from "@workspace/db";
-import { eq, desc, and, gte, sql } from "drizzle-orm";
+import { eq, desc, gte, sql } from "drizzle-orm";
+import { dbError } from "../lib/db-error.js";
 
 const router = Router();
 
@@ -16,8 +17,6 @@ router.get("/summary", async (req, res) => {
 
     const [customerStats] = await db.select({ total: sql<number>`count(*)` }).from(customersTable);
     const [productStats] = await db.select({ total: sql<number>`count(*)` }).from(productsTable).where(eq(productsTable.status, "active"));
-
-    // Low stock: variants with stock < 5
     const [lowStockStats] = await db.select({ count: sql<number>`count(*)` }).from(productVariantsTable).where(sql`${productVariantsTable.stock} < 5`);
 
     const monthStart = new Date();
@@ -40,7 +39,7 @@ router.get("/summary", async (req, res) => {
       ordersThisMonth: Number(monthStats.orders),
     });
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -59,7 +58,7 @@ router.get("/recent-orders", async (req, res) => {
       items: [],
     })));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -93,7 +92,7 @@ router.get("/top-products", async (req, res) => {
 
     res.json(result.filter(Boolean));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 

@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { db } from "@workspace/db";
 import { ordersTable, orderItemsTable, productsTable } from "@workspace/db";
-import { eq, desc, and } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { CreateOrderBody, UpdateOrderBody } from "@workspace/api-zod";
 import { getUserIdFromRequest } from "../lib/jwt.js";
+import { dbError } from "../lib/db-error.js";
 
 const router = Router();
 
@@ -37,11 +38,11 @@ router.get("/", async (req, res) => {
     const orders = await Promise.all(paged.map(enrichOrder));
     res.json({ orders, total });
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
-// POST /api/orders  (place order — user token optional)
+// POST /api/orders  (place order)
 router.post("/", async (req, res) => {
   try {
     const body = CreateOrderBody.parse(req.body);
@@ -87,7 +88,7 @@ router.post("/", async (req, res) => {
     await db.insert(orderItemsTable).values(itemValues);
     res.status(201).json(await enrichOrder(order));
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: dbError(e) });
   }
 });
 
@@ -98,7 +99,7 @@ router.get("/:id", async (req, res) => {
     if (!order) return res.status(404).json({ error: "Not found" });
     res.json(await enrichOrder(order));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -111,7 +112,7 @@ router.patch("/:id", async (req, res) => {
     if (!updated) return res.status(404).json({ error: "Not found" });
     res.json(await enrichOrder(updated));
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: dbError(e) });
   }
 });
 
@@ -120,7 +121,6 @@ router.delete("/:id", async (req, res) => {
   try {
     const orderId = parseInt(req.params.id);
     const userId = getUserIdFromRequest(req);
-
     const [order] = await db.select().from(ordersTable).where(eq(ordersTable.id, orderId));
     if (!order) return res.status(404).json({ error: "Order not found" });
 
@@ -128,18 +128,14 @@ router.delete("/:id", async (req, res) => {
     if (completedStatuses.includes(order.status)) {
       return res.status(403).json({ error: "Cannot cancel an order that is already being processed or completed." });
     }
-
     if (userId && order.userId && order.userId !== userId) {
       return res.status(403).json({ error: "Not authorised to cancel this order." });
     }
 
-    await db.update(ordersTable)
-      .set({ status: "cancelled", updatedAt: new Date() })
-      .where(eq(ordersTable.id, orderId));
-
-    res.json({ success: true, message: "Order cancelled successfully." });
+    await db.update(ordersTable).set({ status: "cancelled", updatedAt: new Date() }).where(eq(ordersTable.id, orderId));
+    res.json({ success: true });
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 

@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { pool } from "@workspace/db";
 import { signAdminToken, verifyToken, isAdminRequest, ADMIN_COOKIE, COOKIE_OPTS } from "../lib/jwt.js";
 
 const router = Router();
@@ -12,6 +13,11 @@ router.post("/login", (req, res) => {
 
   if (!email || !password) {
     res.status(400).json({ error: "Email and password are required" });
+    return;
+  }
+
+  if (!ADMIN_EMAIL || !ADMIN_PASSWORD) {
+    res.status(500).json({ error: "Admin credentials not configured. Set ADMIN_EMAIL and ADMIN_PASSWORD environment variables on Vercel." });
     return;
   }
 
@@ -48,6 +54,60 @@ router.get("/me", (req, res) => {
   }
 });
 
+// GET /api/admin/db-status — diagnostic endpoint to verify DB tables exist
+router.get("/db-status", async (req, res) => {
+  if (!isAdminRequest(req)) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+  const client = await pool.connect();
+  try {
+    const result = await client.query(`
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'public'
+      ORDER BY table_name
+    `);
+    const tables = result.rows.map((r: any) => r.table_name);
+
+    const required = [
+      "users", "products", "collections", "categories", "product_variants",
+      "orders", "order_items", "customers", "reviews", "journal_posts",
+      "lookbook_items", "cart_items", "contact_messages",
+      "newsletter_subscribers", "site_content"
+    ];
+
+    const missing = required.filter(t => !tables.includes(t));
+
+    // Check products columns
+    const colResult = await client.query(`
+      SELECT column_name FROM information_schema.columns
+      WHERE table_name = 'products' AND table_schema = 'public'
+    `).catch(() => ({ rows: [] }));
+    const productCols = (colResult as any).rows.map((r: any) => r.column_name);
+
+    res.json({
+      connected: true,
+      tables,
+      missing,
+      allTablesReady: missing.length === 0,
+      products_columns: productCols,
+      env: {
+        DATABASE_URL: process.env.DATABASE_URL ? "✅ set" : "❌ NOT SET",
+        SESSION_SECRET: process.env.SESSION_SECRET ? "✅ set" : "❌ NOT SET",
+        ADMIN_EMAIL: process.env.ADMIN_EMAIL ? "✅ set" : "❌ NOT SET",
+        ADMIN_PASSWORD: process.env.ADMIN_PASSWORD ? "✅ set" : "❌ NOT SET",
+        SUPABASE_URL: process.env.SUPABASE_URL ? "✅ set" : "❌ NOT SET",
+        SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ? "✅ set" : "❌ NOT SET",
+      }
+    });
+  } catch (e: any) {
+    res.status(500).json({ connected: false, error: e.message });
+  } finally {
+    client.release();
+  }
+});
+
 // POST /api/admin/change-password
 router.post("/change-password", (req, res) => {
   if (!isAdminRequest(req)) {
@@ -64,15 +124,6 @@ router.post("/change-password", (req, res) => {
     return;
   }
   res.json({ success: true, message: "Password change requires updating the ADMIN_PASSWORD environment variable." });
-});
-
-// POST /api/admin/users
-router.post("/users", (req, res) => {
-  if (!isAdminRequest(req)) {
-    res.status(401).json({ error: "Unauthorized" });
-    return;
-  }
-  res.json({ success: true, message: "Additional admin users require updating environment variables." });
 });
 
 export default router;

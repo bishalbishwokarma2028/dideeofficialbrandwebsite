@@ -1,20 +1,16 @@
 import { Router } from "express";
 import { db } from "@workspace/db";
 import { customersTable, ordersTable } from "@workspace/db";
-import { eq, desc, sql } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { CreateCustomerBody } from "@workspace/api-zod";
+import { dbError } from "../lib/db-error.js";
 
 const router = Router();
 
 async function enrichCustomer(c: typeof customersTable.$inferSelect) {
   const orders = await db.select().from(ordersTable).where(eq(ordersTable.customerId, c.id));
   const totalSpent = orders.reduce((s, o) => s + parseFloat(o.total), 0);
-  return {
-    ...c,
-    orderCount: orders.length,
-    totalSpent,
-    createdAt: c.createdAt.toISOString(),
-  };
+  return { ...c, orderCount: orders.length, totalSpent, createdAt: c.createdAt.toISOString() };
 }
 
 // GET /api/customers
@@ -23,12 +19,10 @@ router.get("/", async (req, res) => {
     const limit = parseInt(String(req.query.limit ?? "20"));
     const offset = parseInt(String(req.query.offset ?? "0"));
     const all = await db.select().from(customersTable).orderBy(desc(customersTable.createdAt));
-    const total = all.length;
     const paged = all.slice(offset, offset + limit);
-    const customers = await Promise.all(paged.map(enrichCustomer));
-    res.json({ customers, total });
+    res.json({ customers: await Promise.all(paged.map(enrichCustomer)), total: all.length });
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -45,7 +39,7 @@ router.post("/", async (req, res) => {
     }).returning();
     res.status(201).json(await enrichCustomer(customer));
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: dbError(e) });
   }
 });
 
@@ -56,7 +50,7 @@ router.get("/:id", async (req, res) => {
     if (!customer) return res.status(404).json({ error: "Not found" });
     res.json(await enrichCustomer(customer));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 

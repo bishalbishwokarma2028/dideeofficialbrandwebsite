@@ -3,6 +3,7 @@ import { db } from "@workspace/db";
 import { cartItemsTable, productsTable, productVariantsTable } from "@workspace/db";
 import { eq, and } from "drizzle-orm";
 import { AddToCartBody, UpdateCartItemBody } from "@workspace/api-zod";
+import { dbError } from "../lib/db-error.js";
 
 const router = Router();
 
@@ -15,13 +16,12 @@ async function buildCart(sessionId: string) {
       const [v] = await db.select().from(productVariantsTable).where(eq(productVariantsTable.id, item.variantId));
       if (v) variant = { ...v, price: parseFloat(v.price) };
     }
-    const price = parseFloat(item.price);
     return {
       id: item.id,
       productId: item.productId,
       variantId: item.variantId,
       quantity: item.quantity,
-      price,
+      price: parseFloat(item.price),
       product: product ? {
         ...product,
         price: parseFloat(product.price),
@@ -35,12 +35,7 @@ async function buildCart(sessionId: string) {
     };
   }));
   const subtotal = enriched.reduce((s, i) => s + i.price * i.quantity, 0);
-  return {
-    sessionId,
-    items: enriched,
-    subtotal,
-    itemCount: enriched.reduce((s, i) => s + i.quantity, 0),
-  };
+  return { sessionId, items: enriched, subtotal, itemCount: enriched.reduce((s, i) => s + i.quantity, 0) };
 }
 
 // GET /api/cart
@@ -50,7 +45,7 @@ router.get("/", async (req, res) => {
     if (!sessionId) return res.status(400).json({ error: "sessionId required" });
     res.json(await buildCart(sessionId));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
@@ -84,10 +79,9 @@ router.post("/items", async (req, res) => {
         price: String(price),
       });
     }
-
     res.status(201).json(await buildCart(body.sessionId));
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: dbError(e) });
   }
 });
 
@@ -105,7 +99,7 @@ router.patch("/items/:cartItemId", async (req, res) => {
     }
     res.json(await buildCart(item.sessionId));
   } catch (e: any) {
-    res.status(400).json({ error: e.message });
+    res.status(400).json({ error: dbError(e) });
   }
 });
 
@@ -118,7 +112,7 @@ router.delete("/items/:cartItemId", async (req, res) => {
     await db.delete(cartItemsTable).where(eq(cartItemsTable.id, id));
     res.json(await buildCart(item.sessionId));
   } catch (e: any) {
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: dbError(e) });
   }
 });
 
