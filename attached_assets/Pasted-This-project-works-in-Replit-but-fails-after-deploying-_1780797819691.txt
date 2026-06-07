@@ -1,0 +1,137 @@
+This project works in Replit but fails after deploying to Vercel.
+
+IMPORTANT REQUIREMENT:
+- The system must be FULLY serverless
+- DO NOT use any local file storage or filesystem
+- DO NOT store anything in local folders like /uploads
+- ALL data, images, and authentication MUST be handled only by Supabase
+- The project must be 100% compatible with Vercel
+
+-----------------------------------
+
+CURRENT ISSUES:
+
+- Image upload works but saving data from admin panel fails
+- Admin panel actions (insert/update/delete) throw errors
+- User registration and login are not working
+- Errors appear in production (Vercel) but not in Replit
+
+-----------------------------------
+
+YOUR TASK:
+
+1. ANALYZE FULL PROJECT
+
+Scan all code and detect issues in:
+- Supabase client setup
+- Environment variables (SUPABASE_URL, SUPABASE_ANON_KEY)
+- Authentication system (login/register/session)
+- Admin role logic
+- Database queries (insert/update/delete/select)
+- File upload logic
+- Any backend/server usage (Express, Node server)
+- Any local file storage usage (fs, multer, uploads folder)
+- Any localhost API calls
+
+-----------------------------------
+
+2. REMOVE ALL LOCAL STORAGE (CRITICAL)
+
+- Remove any use of:
+  - fs module
+  - multer
+  - local uploads folder
+- Replace with Supabase Storage
+- Ensure images are uploaded directly to Supabase buckets
+- Ensure returned public URLs are stored in database
+
+-----------------------------------
+
+3. FIX AUTHENTICATION
+
+- Ensure user registration works
+- Ensure login works in production
+- Ensure session persists correctly
+- Ensure user is not null after login
+- Add proper error handling and logs
+
+-----------------------------------
+
+4. FIX DATABASE & RLS (VERY IMPORTANT)
+
+- Identify all tables used
+- Detect RLS issues blocking queries
+
+Generate COMPLETE SQL policies for:
+
+- SELECT
+- INSERT
+- UPDATE
+- DELETE
+
+Policies should support:
+- authenticated users
+OR
+- admin-only access (if role system exists)
+
+You MUST provide SQL like:
+
+CREATE POLICY ...
+
+Also explain where to run the SQL in Supabase
+
+-----------------------------------
+
+5. FIX ADMIN PANEL
+
+- Ensure admin can:
+  - Add data
+  - Update data
+  - Delete data
+
+- Fix any broken API calls
+- If backend is used:
+  - Convert to Vercel serverless functions (/api)
+  OR
+  - Remove backend and use Supabase client directly
+
+-----------------------------------
+
+6. FIX FILE UPLOAD SYSTEM
+
+- Upload images directly to Supabase Storage
+- Ensure correct bucket usage
+- Ensure public URL is retrieved
+- Save image URL in database
+
+-----------------------------------
+
+7. MAKE PROJECT VERCEL-COMPATIBLE
+
+- Remove localhost URLs
+- Use environment variables correctly
+- Ensure frontend + serverless structure only
+
+-----------------------------------
+
+8. ADD DEBUGGING
+
+- Add try/catch to all async functions
+- Log Supabase errors clearly using console.log
+- Prevent silent failures
+
+-----------------------------------
+
+9. OUTPUT REQUIRED
+
+You MUST provide:
+
+1. Fully fixed code
+2. ALL required SQL queries (RLS policies)
+3. Clear explanation of issues found
+4. Step-by-step instructions for:
+   - Supabase setup (Auth, Storage, RLS)
+   - Vercel environment variables
+
+DO NOT give generic advice.
+Fix everything properly for production.
